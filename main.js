@@ -95,7 +95,7 @@ function initialize() {
 // 一鍵產出公告用補考名單、試場記錄表
 function all_in_one() {
     // Start counting execution time
-    var runtime_count_start = new Date();
+    let runtime_count_start = new Date();
 
     get_filtered_data(); // 篩選出列入考程的科目
     arrange_commons_session(); // 安排物理、國、英、數、資訊科技、史地的節次

@@ -1,6 +1,6 @@
 function runtime_count_stop(start) {
-    var stop = new Date();
-    var newRuntime = Number(stop) - Number(start);
+    let stop = new Date();
+    let newRuntime = Number(stop) - Number(start);
     return Math.ceil(newRuntime / 1000);
 }
 
