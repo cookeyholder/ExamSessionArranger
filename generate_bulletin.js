@@ -3,8 +3,8 @@ function generate_bulletin() {
 
     const [headers, ...data] = filteredSheet.getDataRange().getValues();
 
-    const class_column = headers.indexOf("班級");
-    const std_number_column = headers.indexOf("學號");
+    const classNameColumn = headers.indexOf("班級");
+    const studentIdColumn = headers.indexOf("學號");
     const name_column = headers.indexOf("姓名");
     const subject_column = headers.indexOf("科目名稱");
     const session_column = headers.indexOf("節次");
@@ -32,8 +32,8 @@ function generate_bulletin() {
         }
 
         let tmp = [
-            row[class_column],
-            row[std_number_column],
+            row[classNameColumn],
+            row[studentIdColumn],
             masked_name,
             row[subject_column],
             row[session_column],

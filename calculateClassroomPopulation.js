@@ -1,7 +1,7 @@
 function calculate_classroom_population() {
     const [headers, ...data] = filteredSheet.getDataRange().getValues();
     const session_column = headers.indexOf("節次");
-    const class_column = headers.indexOf("班級");
+    const classNameColumn = headers.indexOf("班級");
     const big_bag_serial_column = headers.indexOf("大袋序號");
     const small_bag_serial_column = headers.indexOf("小袋序號");
     const big_bag_population_column = headers.indexOf("大袋人數");
@@ -28,7 +28,7 @@ function calculate_classroom_population() {
         }
 
         let class_population_key =
-            "班級" + row[small_bag_serial_column] + row[class_column];
+            "班級" + row[small_bag_serial_column] + row[classNameColumn];
         if (Object.keys(class_population).includes(class_population_key)) {
             class_population[class_population_key] += 1;
         } else {
@@ -41,7 +41,7 @@ function calculate_classroom_population() {
         let big_bag_key = "大袋" + row[big_bag_serial_column];
         let small_bag_key = "小袋" + row[small_bag_serial_column];
         let class_population_key =
-            "班級" + row[small_bag_serial_column] + row[class_column];
+            "班級" + row[small_bag_serial_column] + row[classNameColumn];
         row[big_bag_population_column] = big_bag_population[big_bag_key];
         row[small_bag_population_column] = small_bag_population[small_bag_key];
         row[class_population_column] = class_population[class_population_key];

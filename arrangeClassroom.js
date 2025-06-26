@@ -1,6 +1,6 @@
 function arrangeClassroom() {
     const [headers, ...data] = filteredSheet.getDataRange().getValues();
-    const class_column = headers.indexOf("班級");
+    const classNameColumn = headers.indexOf("班級");
     const subject_column = headers.indexOf("科目名稱");
     const classroom_column = headers.indexOf("試場");
 
@@ -53,7 +53,7 @@ function arrangeClassroom() {
 
                 if (!has_duplicate && has_quota && under_subject_limitation) {
                     sessions[i].students.forEach(function (row) {
-                        let key = row[class_column] + row[subject_column];
+                        let key = row[classNameColumn] + row[subject_column];
                         if (key == dgs[k][0] && row[classroom_column] == 0) {
                             row[classroom_column] = j;
                             sessions[i].classrooms[j].students.push(row);

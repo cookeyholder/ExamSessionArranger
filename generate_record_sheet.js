@@ -6,8 +6,8 @@ function generate_sessionRecordSheet() {
     const session_column = headers.indexOf("節次");
     const classroom_column = headers.indexOf("試場");
     const time_column = headers.indexOf("時間");
-    const class_column = headers.indexOf("班級");
-    const std_number_column = headers.indexOf("學號");
+    const classNameColumn = headers.indexOf("班級");
+    const studentIdColumn = headers.indexOf("學號");
     const name_column = headers.indexOf("姓名");
     const subject_column = headers.indexOf("科目名稱");
     const class_population_column = headers.indexOf("班級人數");
@@ -55,8 +55,8 @@ function generate_sessionRecordSheet() {
             row[session_column],
             row[classroom_column],
             row[time_column],
-            row[class_column],
-            row[std_number_column],
+            row[classNameColumn],
+            row[studentIdColumn],
             row[name_column],
             row[subject_column],
             row[class_population_column],

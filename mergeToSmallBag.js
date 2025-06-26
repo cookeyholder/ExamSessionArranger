@@ -24,9 +24,9 @@ function merge_to_small_bag() {
     const session_column = headers.indexOf("節次");
     const time_column = headers.indexOf("時間");
     const classroom_column = headers.indexOf("試場");
-    const class_column = headers.indexOf("班級");
-    const subject_name_column = headers.indexOf("科目名稱");
-    const teacher_column = headers.indexOf("任課老師");
+    const classNameColumn = headers.indexOf("班級");
+    const subjectNameColumn = headers.indexOf("科目名稱");
+    const teacherNameColumn = headers.indexOf("任課老師");
     const small_bag_population_column = headers.indexOf("小袋人數");
     const isComputerGradedColumn = headers.indexOf("電腦");
     const isManualGradedColumn = headers.indexOf("人工");
@@ -57,9 +57,9 @@ function merge_to_small_bag() {
         tmp_body_1.replaceText("«節次»", data[i][session_column]);
         tmp_body_1.replaceText("«時間»", data[i][time_column]);
         tmp_body_1.replaceText("«試場»", data[i][classroom_column]);
-        tmp_body_1.replaceText("«班級»", data[i][class_column]);
-        tmp_body_1.replaceText("«科目名稱»", data[i][subject_name_column]);
-        tmp_body_1.replaceText("«任課老師»", data[i][teacher_column]);
+        tmp_body_1.replaceText("«班級»", data[i][classNameColumn]);
+        tmp_body_1.replaceText("«科目名稱»", data[i][subjectNameColumn]);
+        tmp_body_1.replaceText("«任課老師»", data[i][teacherNameColumn]);
         tmp_body_1.replaceText(
             "«班級人數»",
             data[i][small_bag_population_column]
@@ -201,20 +201,20 @@ function merge_to_small_bag() {
 function get_students(small_bag_serial) {
     const [headers, ...data] = filteredSheet.getDataRange().getValues();
     const small_bag_serial_column = headers.indexOf("小袋序號");
-    const class_column = headers.indexOf("班級");
-    const std_number_column = headers.indexOf("學號");
-    const std_name_column = headers.indexOf("姓名");
-    const subject_name_column = headers.indexOf("科目名稱");
+    const classNameColumn = headers.indexOf("班級");
+    const studentIdColumn = headers.indexOf("學號");
+    const studentNameColumn = headers.indexOf("姓名");
+    const subjectNameColumn = headers.indexOf("科目名稱");
 
     let students_table = [["", "班級", "學號", "姓名", "科目", "缺考"]];
     data.forEach(function (row, i) {
         if (row[small_bag_serial_column] == small_bag_serial) {
             students_table.push([
                 parseInt(students_table.length).toString(),
-                row[class_column],
-                row[std_number_column],
-                row[std_name_column],
-                row[subject_name_column],
+                row[classNameColumn],
+                row[studentIdColumn],
+                row[studentNameColumn],
+                row[subjectNameColumn],
                 "",
             ]);
         }

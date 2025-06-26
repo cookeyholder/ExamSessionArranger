@@ -30,7 +30,7 @@ function onOpen() {
         .addItem("依「節次試場」排序補考名單", "sort_by_session_classroom")
         .addSeparator()
         .addItem("1-1. 清空", "initialize")
-        .addItem("1-2. 開始篩選", "get_filtered_data")
+        .addItem("1-2. 開始篩選", "getFilteredData")
         .addItem("1-3. 安排共同科節次", "arrange_commons_session")
         .addItem("1-4. 安排專業科節次", "arrangeProfessionsSession")
         .addItem("1-5. 安排試場", "arrangeClassroom")
@@ -97,7 +97,7 @@ function all_in_one() {
     // Start counting execution time
     let runtime_count_start = new Date();
 
-    get_filtered_data(); // 篩選出列入考程的科目
+    getFilteredData(); // 篩選出列入考程的科目
     arrange_commons_session(); // 安排物理、國、英、數、資訊科技、史地的節次
     arrangeProfessionsSession(); // 安排專業科目的節次
     arrangeClassroom(); // 安排試場的班級科目

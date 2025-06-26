@@ -21,7 +21,7 @@ function merge_to_big_bag() {
     const classroom_column = headers.indexOf("試場");
     const time_column = headers.indexOf("時間");
     const small_bag_column = headers.indexOf("試卷袋序號");
-    const teacher_column = headers.indexOf("監考教師");
+    const teacherNameColumn = headers.indexOf("監考教師");
     const big_bag_population_column = headers.indexOf("各試場人數");
 
     const BATCH_SIZE = 50; // 每個 PDF 檔的頁數，太大或太小的數字都會減慢整體速度
@@ -48,7 +48,7 @@ function merge_to_big_bag() {
         tmp_body_1.replaceText("«補考日期»", make_up_date);
         tmp_body_1.replaceText("«時間»", data[i][time_column]);
         tmp_body_1.replaceText("«試卷袋序號»", data[i][small_bag_column]);
-        tmp_body_1.replaceText("«監考教師»", data[i][teacher_column]);
+        tmp_body_1.replaceText("«監考教師»", data[i][teacherNameColumn]);
         tmp_body_1.replaceText(
             "«各試場人數»",
             data[i][big_bag_population_column]

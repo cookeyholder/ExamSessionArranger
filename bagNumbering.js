@@ -2,7 +2,7 @@ function bag_numbering() {
     sort_by_session_classroom();
 
     const [headers, ...data] = filteredSheet.getDataRange().getValues();
-    const class_column = headers.indexOf("班級");
+    const classNameColumn = headers.indexOf("班級");
     const subject_column = headers.indexOf("科目名稱");
     const session_column = headers.indexOf("節次");
     const classroom_column = headers.indexOf("試場");
@@ -22,7 +22,7 @@ function bag_numbering() {
             "-" +
             row[classroom_column] +
             "_" +
-            row[class_column] +
+            row[classNameColumn] +
             "=" +
             row[subject_column];
 
@@ -45,7 +45,7 @@ function bag_numbering() {
             "-" +
             row[classroom_column] +
             "_" +
-            row[class_column] +
+            row[classNameColumn] +
             "=" +
             row[subject_column];
         row[big_bag_column] = big_bag_serial[big_key];

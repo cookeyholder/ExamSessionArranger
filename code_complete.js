@@ -1,12 +1,12 @@
 function unfilted_code_complete() {
-    const [unfilteredSheetHeaders, ...unfiltered_data] = unfilteredSheet
+    const [unfilteredSheetHeaders, ...unfilteredData] = unfilteredSheet
         .getDataRange()
         .getValues();
 
-    const class_column = unfilteredSheetHeaders.indexOf("班級");
+    const classNameColumn = unfilteredSheetHeaders.indexOf("班級");
     const subject_column = unfilteredSheetHeaders.indexOf("科目");
-    const code_column = unfilteredSheetHeaders.indexOf("科目代碼補完");
-    const subject_name_column = unfilteredSheetHeaders.indexOf("科目名稱");
+    const subjectCodeColumn = unfilteredSheetHeaders.indexOf("科目代碼補完");
+    const subjectNameColumn = unfilteredSheetHeaders.indexOf("科目名稱");
 
     const department_to_group = {
         301: "21",
@@ -28,18 +28,18 @@ function unfilted_code_complete() {
     };
 
     let modified_data = [];
-    unfiltered_data.forEach(function (row) {
+    unfilteredData.forEach(function (row) {
         let tmp = row[subject_column].toString().split(".")[0];
         if (tmp.length == 16) {
-            row[code_column] =
+            row[subjectCodeColumn] =
                 tmp.slice(0, 3) +
                 "553401" +
                 tmp.slice(3, 9) +
                 "0" +
                 tmp.slice(9);
         } else {
-            row[code_column] =
-                grade_to_year[row[class_column].toString().slice(2, 3)] +
+            row[subjectCodeColumn] =
+                grade_to_year[row[classNameColumn].toString().slice(2, 3)] +
                 "553401V" +
                 department_to_group[tmp.slice(0, 3)] +
                 tmp.slice(0, 3) +
@@ -47,11 +47,11 @@ function unfilted_code_complete() {
                 tmp.slice(3);
         }
 
-        row[subject_name_column] = row[subject_column].toString().split(".")[1];
+        row[subjectNameColumn] = row[subject_column].toString().split(".")[1];
         modified_data.push(row);
     });
 
-    if (modified_data.length == unfiltered_data.length) {
+    if (modified_data.length == unfilteredData.length) {
         set_range_values(
             unfilteredSheet.getRange(
                 2,
@@ -68,14 +68,14 @@ function unfilted_code_complete() {
 }
 
 function open_code_complete() {
-    const [openSheetHeaders, ...open_data] = openSheet
+    const [openSheetHeaders, ...openData] = openSheet
         .getDataRange()
         .getValues();
 
-    const class_column = openSheetHeaders.indexOf("班級名稱");
-    const code_column = openSheetHeaders.indexOf("科目代碼");
+    const classNameColumn = openSheetHeaders.indexOf("班級名稱");
+    const subjectCodeColumn = openSheetHeaders.indexOf("科目代碼");
     const complete_column = openSheetHeaders.indexOf("科目代碼補完");
-    const subject_name_column = openSheetHeaders.indexOf("科目名稱");
+    const subjectNameColumn = openSheetHeaders.indexOf("科目名稱");
 
     const department_to_group = {
         301: "21",
@@ -97,9 +97,9 @@ function open_code_complete() {
     };
 
     let modified_data = [];
-    open_data.forEach(function (row) {
-        let tmp = row[code_column];
-        if (row[code_column].length == 16) {
+    openData.forEach(function (row) {
+        let tmp = row[subjectCodeColumn];
+        if (row[subjectCodeColumn].length == 16) {
             row[complete_column] =
                 tmp.slice(0, 3) +
                 "553401" +
@@ -108,7 +108,7 @@ function open_code_complete() {
                 tmp.slice(9);
         } else {
             row[complete_column] =
-                grade_to_year[row[class_column].toString().slice(2, 3)] +
+                grade_to_year[row[classNameColumn].toString().slice(2, 3)] +
                 "553401V" +
                 department_to_group[tmp.slice(0, 3)] +
                 tmp.slice(0, 3) +
@@ -119,7 +119,7 @@ function open_code_complete() {
         modified_data.push(row);
     });
 
-    if (modified_data.length == open_data.length) {
+    if (modified_data.length == openData.length) {
         set_range_values(
             openSheet.getRange(
                 2,

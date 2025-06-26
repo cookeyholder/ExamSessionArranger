@@ -10,7 +10,7 @@ function generate_big_bag_data() {
     const session_column = headers.indexOf("節次");
     const time_column = headers.indexOf("時間");
     const classroom_column = headers.indexOf("試場");
-    const teacher_column = headers.indexOf("監考教師");
+    const teacherNameColumn = headers.indexOf("監考教師");
     const big_bag_population_column = headers.indexOf("大袋人數");
 
     bigBagSheet.clear();
@@ -66,7 +66,7 @@ function generate_big_bag_data() {
                 Math.min(...container["大袋" + row[big_bag_serial_column]]) +
                     "-" +
                     Math.max(...container["大袋" + row[big_bag_serial_column]]),
-                row[teacher_column],
+                row[teacherNameColumn],
                 row[big_bag_population_column],
             ];
 

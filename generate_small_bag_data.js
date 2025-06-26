@@ -8,9 +8,9 @@ function generate_small_bag_data() {
     const session_column = headers.indexOf("節次");
     const time_column = headers.indexOf("時間");
     const classroom_column = headers.indexOf("試場");
-    const class_column = headers.indexOf("班級");
-    const subject_name_column = headers.indexOf("科目名稱");
-    const teacher_column = headers.indexOf("任課老師");
+    const classNameColumn = headers.indexOf("班級");
+    const subjectNameColumn = headers.indexOf("科目名稱");
+    const teacherNameColumn = headers.indexOf("任課老師");
     const small_bag_population_column = headers.indexOf("小袋人數");
     const isComputerGradedColumn = headers.indexOf("電腦");
     const isManualGradedColumn = headers.indexOf("人工");
@@ -49,9 +49,9 @@ function generate_small_bag_data() {
                 row[session_column],
                 row[time_column],
                 row[classroom_column],
-                row[class_column],
-                row[subject_name_column],
-                row[teacher_column],
+                row[classNameColumn],
+                row[subjectNameColumn],
+                row[teacherNameColumn],
                 row[small_bag_population_column],
                 row[isComputerGradedColumn],
                 row[isManualGradedColumn],

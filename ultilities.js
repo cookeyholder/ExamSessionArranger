@@ -148,7 +148,7 @@ function get_department_grade_statistics_of_array(data) {
 function get_department_grade_subject_statistics_of_array(data) {
     const department_column = 0;
     const grade_column = 1;
-    const subject_name_column = 7;
+    const subjectNameColumn = 7;
 
     let statistics = {};
     for (row of data) {
@@ -156,7 +156,7 @@ function get_department_grade_subject_statistics_of_array(data) {
             row[department_column] +
             row[grade_column] +
             "_" +
-            row[subject_name_column];
+            row[subjectNameColumn];
 
         if (key in statistics) {
             statistics[key] += 1;
