@@ -1,8 +1,38 @@
 {
-  "editor.formatOnPaste": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnType": true,
-  "editor.formatOnSave": true,
-  "files.autoSave": "onFocusChange",
-  "prettier.tabWidth": 4
+    "editor.formatOnPaste": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnType": true,
+    "editor.formatOnSave": true,
+    "files.autoSave": "onFocusChange",
+    "prettier.tabWidth": 4,
+    "github.copilot.enable": {
+        "*": true,
+        "plaintext": false,
+        "markdown": true,
+        "scminput": true,
+        "yaml": true,
+        "html": true,
+        "powershell": true,
+        "javascript": true,
+        "aspnetcorerazor": true
+    },
+    "github.copilot.chat.localeOverride": "zh-TW",
+    "github.copilot.chat.useProjectTemplates": true,
+    "github.copilot.chat.scopeSelection": true,
+    "chat.detectParticipant.enabled": false,
+    "chat.promptFiles": true,
+    "chat.promptFilesLocations": {
+        ".github/prompts": true
+    },
+    "github.copilot.chat.languageContext.typescript.enabled": true,
+    "github.copilot.chat.agent.thinkingTool": true,
+    "github.copilot.renameSuggestions.triggerAutomatically": true,
+    "github.copilot.chat.commitMessageGeneration.instructions": [
+        {
+            "text": "# Use Conventional Commits 1.0.0 for commit messages."
+        },
+        {
+            "text": "請一律使用正體中文來撰寫記錄"
+        }
+    ]
 }
