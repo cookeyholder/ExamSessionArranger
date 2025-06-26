@@ -1,7 +1,5 @@
 function sort_by_subject() {
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const filtered_sheet = ss.getSheetByName("排入考程的補考名單");
-    const filtered = filtered_sheet.getDataRange();
+    const filtered = filteredSheet.getDataRange();
 
     filtered.offset(1, 0, filtered.getNumRows() - 1).sort([
         { column: 2, ascending: true },
@@ -14,9 +12,7 @@ function sort_by_subject() {
 }
 
 function sort_by_classname() {
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const filtered_sheet = ss.getSheetByName("排入考程的補考名單");
-    const filtered = filtered_sheet.getDataRange();
+    const filtered = filteredSheet.getDataRange();
 
     filtered.offset(1, 0, filtered.getNumRows() - 1).sort([
         { column: 2, ascending: true },
@@ -28,9 +24,7 @@ function sort_by_classname() {
 }
 
 function sort_by_session_classroom() {
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const filtered_sheet = ss.getSheetByName("排入考程的補考名單");
-    const filtered = filtered_sheet.getDataRange();
+    const filtered = filteredSheet.getDataRange();
 
     filtered.offset(1, 0, filtered.getNumRows() - 1).sort([
         { column: 9, ascending: true },

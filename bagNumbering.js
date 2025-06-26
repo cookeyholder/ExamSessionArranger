@@ -1,9 +1,7 @@
 function bag_numbering() {
     sort_by_session_classroom();
 
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const filtered_sheet = ss.getSheetByName("排入考程的補考名單");
-    const [headers, ...data] = filtered_sheet.getDataRange().getValues();
+    const [headers, ...data] = filteredSheet.getDataRange().getValues();
     const class_column = headers.indexOf("班級");
     const subject_column = headers.indexOf("科目名稱");
     const session_column = headers.indexOf("節次");
@@ -56,7 +54,7 @@ function bag_numbering() {
 
     // 將資料寫回試算表
     set_range_values(
-        filtered_sheet.getRange(2, 1, data.length, data[0].length),
+        filteredSheet.getRange(2, 1, data.length, data[0].length),
         data
     );
 }

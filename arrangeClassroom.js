@@ -1,12 +1,9 @@
 function arrangeClassroom() {
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const filtered_sheet = ss.getSheetByName("排入考程的補考名單");
-    const [headers, ...data] = filtered_sheet.getDataRange().getValues();
+    const [headers, ...data] = filteredSheet.getDataRange().getValues();
     const class_column = headers.indexOf("班級");
     const subject_column = headers.indexOf("科目名稱");
     const classroom_column = headers.indexOf("試場");
 
-    const parametersSheet = ss.getSheetByName("參數區");
     const MAX_SESSION_NUMBER = parametersSheet.getRange("B5").getValue();
     const MAX_CLASSROOM_NUMBER = parametersSheet.getRange("B6").getValue();
     const MAX_CLASSROOM_STUDENTS = parametersSheet.getRange("B7").getValue();
@@ -98,7 +95,7 @@ function arrangeClassroom() {
 
     if (modified_data.length == data.length) {
         set_range_values(
-            filtered_sheet.getRange(
+            filteredSheet.getRange(
                 2,
                 1,
                 modified_data.length,
@@ -121,6 +118,6 @@ function arrangeClassroom() {
         );
     }
 
-    filtered_sheet.getRange("I:J").setNumberFormat("#,##0");
+    filteredSheet.getRange("I:J").setNumberFormat("#,##0");
     sort_by_session_classroom();
 }

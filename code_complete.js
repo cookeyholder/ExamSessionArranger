@@ -1,15 +1,12 @@
 function unfilted_code_complete() {
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const parametersSheet = ss.getSheetByName("參數區");
-    const unfiltered_sheet = ss.getSheetByName("註冊組補考名單");
-    const [unfiltered_sheetHeaders, ...unfiltered_data] = unfiltered_sheet
+    const [unfilteredSheetHeaders, ...unfiltered_data] = unfilteredSheet
         .getDataRange()
         .getValues();
 
-    const class_column = unfiltered_sheetHeaders.indexOf("班級");
-    const subject_column = unfiltered_sheetHeaders.indexOf("科目");
-    const code_column = unfiltered_sheetHeaders.indexOf("科目代碼補完");
-    const subject_name_column = unfiltered_sheetHeaders.indexOf("科目名稱");
+    const class_column = unfilteredSheetHeaders.indexOf("班級");
+    const subject_column = unfilteredSheetHeaders.indexOf("科目");
+    const code_column = unfilteredSheetHeaders.indexOf("科目代碼補完");
+    const subject_name_column = unfilteredSheetHeaders.indexOf("科目名稱");
 
     const department_to_group = {
         301: "21",
@@ -56,7 +53,7 @@ function unfilted_code_complete() {
 
     if (modified_data.length == unfiltered_data.length) {
         set_range_values(
-            unfiltered_sheet.getRange(
+            unfilteredSheet.getRange(
                 2,
                 1,
                 modified_data.length,
@@ -71,17 +68,14 @@ function unfilted_code_complete() {
 }
 
 function open_code_complete() {
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const parametersSheet = ss.getSheetByName("參數區");
-    const open_sheet = ss.getSheetByName("開課資料(查詢任課教師用)");
-    const [open_sheetHeaders, ...open_data] = open_sheet
+    const [openSheetHeaders, ...open_data] = openSheet
         .getDataRange()
         .getValues();
 
-    const class_column = open_sheetHeaders.indexOf("班級名稱");
-    const code_column = open_sheetHeaders.indexOf("科目代碼");
-    const complete_column = open_sheetHeaders.indexOf("科目代碼補完");
-    const subject_name_column = open_sheetHeaders.indexOf("科目名稱");
+    const class_column = openSheetHeaders.indexOf("班級名稱");
+    const code_column = openSheetHeaders.indexOf("科目代碼");
+    const complete_column = openSheetHeaders.indexOf("科目代碼補完");
+    const subject_name_column = openSheetHeaders.indexOf("科目名稱");
 
     const department_to_group = {
         301: "21",
@@ -127,7 +121,7 @@ function open_code_complete() {
 
     if (modified_data.length == open_data.length) {
         set_range_values(
-            open_sheet.getRange(
+            openSheet.getRange(
                 2,
                 1,
                 modified_data.length,

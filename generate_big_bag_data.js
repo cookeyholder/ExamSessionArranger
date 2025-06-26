@@ -1,9 +1,5 @@
 function generate_big_bag_data() {
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const parametersSheet = ss.getSheetByName("參數區");
-    const filtered_sheet = ss.getSheetByName("排入考程的補考名單");
-    const big_bag_sheet = ss.getSheetByName("大袋封面套印用資料");
-    const [headers, ...data] = filtered_sheet.getDataRange().getValues();
+    const [headers, ...data] = filteredSheet.getDataRange().getValues();
 
     const school_year = parametersSheet.getRange("B2").getValue();
     const semester = parametersSheet.getRange("B3").getValue();
@@ -17,11 +13,11 @@ function generate_big_bag_data() {
     const teacher_column = headers.indexOf("監考教師");
     const big_bag_population_column = headers.indexOf("大袋人數");
 
-    big_bag_sheet.clear();
+    bigBagSheet.clear();
 
     // 刪除多餘的欄和列，並設置標題列
-    if (big_bag_sheet.getMaxRows() > 5) {
-        big_bag_sheet.deleteRows(2, big_bag_sheet.getMaxRows() - 5);
+    if (bigBagSheet.getMaxRows() > 5) {
+        bigBagSheet.deleteRows(2, bigBagSheet.getMaxRows() - 5);
     }
 
     let big_bags = [
@@ -80,7 +76,7 @@ function generate_big_bag_data() {
     });
 
     set_range_values(
-        big_bag_sheet.getRange(1, 1, big_bags.length, big_bags[0].length),
+        bigBagSheet.getRange(1, 1, big_bags.length, big_bags[0].length),
         big_bags
     );
 }

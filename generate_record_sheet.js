@@ -1,11 +1,7 @@
-function generate_record_sheet() {
+function generate_sessionRecordSheet() {
     sort_by_session_classroom();
 
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const parameters_sheet = ss.getSheetByName("參數區");
-    const filtered_sheet = ss.getSheetByName("排入考程的補考名單");
-    const [headers, ...data] = filtered_sheet.getDataRange().getValues();
-    const record_sheet = ss.getSheetByName("試場紀錄表(A表)");
+    const [headers, ...data] = filteredSheet.getDataRange().getValues();
 
     const session_column = headers.indexOf("節次");
     const classroom_column = headers.indexOf("試場");
@@ -17,9 +13,9 @@ function generate_record_sheet() {
     const class_population_column = headers.indexOf("班級人數");
 
     // 刪除多餘的欄和列
-    record_sheet.clear();
-    if (record_sheet.getMaxRows() > 5) {
-        record_sheet.deleteRows(2, record_sheet.getMaxRows() - 5);
+    sessionRecordSheet.clear();
+    if (sessionRecordSheet.getMaxRows() > 5) {
+        sessionRecordSheet.deleteRows(2, sessionRecordSheet.getMaxRows() - 5);
     }
 
     let modified_data = [
@@ -72,7 +68,7 @@ function generate_record_sheet() {
     });
 
     set_range_values(
-        record_sheet.getRange(
+        sessionRecordSheet.getRange(
             1,
             1,
             modified_data.length,
@@ -82,55 +78,55 @@ function generate_record_sheet() {
     );
 
     // 設定格式美化表格
-    record_sheet
+    sessionRecordSheet
         .getRange("A1:L1")
         .mergeAcross()
         .setVerticalAlignment("bottom")
         .setFontSize(14)
         .setFontWeight("bold");
-    record_sheet.getRange("J2:K2").mergeAcross();
-    record_sheet
+    sessionRecordSheet.getRange("J2:K2").mergeAcross();
+    sessionRecordSheet
         .getRange("A2:A3")
         .mergeVertically()
         .setVerticalAlignment("middle");
-    record_sheet
+    sessionRecordSheet
         .getRange("B2:B3")
         .mergeVertically()
         .setVerticalAlignment("middle");
-    record_sheet
+    sessionRecordSheet
         .getRange("C2:C3")
         .mergeVertically()
         .setVerticalAlignment("middle");
-    record_sheet
+    sessionRecordSheet
         .getRange("D2:D3")
         .mergeVertically()
         .setVerticalAlignment("middle");
-    record_sheet
+    sessionRecordSheet
         .getRange("E2:E3")
         .mergeVertically()
         .setVerticalAlignment("middle");
-    record_sheet
+    sessionRecordSheet
         .getRange("F2:F3")
         .mergeVertically()
         .setVerticalAlignment("middle");
-    record_sheet
+    sessionRecordSheet
         .getRange("G2:G3")
         .mergeVertically()
         .setVerticalAlignment("middle");
-    record_sheet
+    sessionRecordSheet
         .getRange("H2:H3")
         .mergeVertically()
         .setVerticalAlignment("middle");
-    record_sheet
+    sessionRecordSheet
         .getRange("I2:I3")
         .mergeVertically()
         .setVerticalAlignment("middle");
-    record_sheet
+    sessionRecordSheet
         .getRange("L2:L3")
         .mergeVertically()
         .setVerticalAlignment("middle");
 
-    record_sheet
+    sessionRecordSheet
         .getRange(2, 1, modified_data.length + 2, modified_data[0].length)
         .setHorizontalAlignment("center")
         .setVerticalAlignment("middle")

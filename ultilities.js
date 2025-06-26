@@ -83,7 +83,6 @@ function getDepartmentName(cls) {
 }
 
 function checkShowedBoxes() {
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
     const data_range = ss
         .getSheetByName("教學組排入考程的科目")
         .getRange("A2:A");
@@ -103,7 +102,6 @@ function checkShowedBoxes() {
 }
 
 function cancelCheckboxes() {
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
     const data_range = ss
         .getSheetByName("教學組排入考程的科目")
         .getRange("A1:A");
@@ -172,18 +170,16 @@ function get_department_grade_subject_statistics_of_array(data) {
 
 function get_department_grade_statistics() {
     // 統計各科別年級、各班級的應考人數
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const filtered_sheet = ss.getSheetByName("排入考程的補考名單");
-    const [headers, ...data] = filtered_sheet.getDataRange().getValues();
+
+    const [headers, ...data] = filteredSheet.getDataRange().getValues();
 
     return get_department_grade_statistics_of_array(data);
 }
 
 function get_department_grade_subject_statistics() {
     // 統計各科別年級、各班級、科目的應考人數
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const filtered_sheet = ss.getSheetByName("排入考程的補考名單");
-    const [headers, ...data] = filtered_sheet.getDataRange().getValues();
+
+    const [headers, ...data] = filteredSheet.getDataRange().getValues();
 
     return get_department_grade_subject_statistics_of_array(data);
 }
@@ -211,8 +207,6 @@ function create_classroom() {
 
 function create_session() {
     // session 物件工廠，用來產生下面的 get_session_statistic 函數中，需要建立 9 個 session 物件
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const parametersSheet = ss.getSheetByName("參數區");
     const MAX_CLASSROOM_NUMBER = parametersSheet.getRange("B6").getValue();
     const session = {
         classrooms: [],
@@ -255,11 +249,8 @@ function create_session() {
 }
 
 function get_session_statistics() {
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const filtered_sheet = ss.getSheetByName("排入考程的補考名單");
-    const [headers, ...data] = filtered_sheet.getDataRange().getValues();
+    const [headers, ...data] = filteredSheet.getDataRange().getValues();
     const session_column = headers.indexOf("節次");
-    const parametersSheet = ss.getSheetByName("參數區");
     const MAX_SESSION_NUMBER = parametersSheet.getRange("B5").getValue();
 
     const sessions = [];

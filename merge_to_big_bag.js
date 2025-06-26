@@ -3,10 +3,8 @@ function merge_to_big_bag() {
     // generate_big_bag_data();
 
     const runtime_count_start = new Date();
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const parametersSheet = ss.getSheetByName("參數區");
-    const big_bag_sheet = ss.getSheetByName("大袋封面套印用資料");
-    const [headers, ...data] = big_bag_sheet.getDataRange().getValues();
+
+    const [headers, ...data] = bigBagSheet.getDataRange().getValues();
     const school_year = parametersSheet.getRange("B2").getValue();
     const semester = parametersSheet.getRange("B3").getValue();
     const folder_id = parametersSheet.getRange("B10").getValue();

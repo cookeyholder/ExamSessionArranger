@@ -1,7 +1,5 @@
 function calculate_classroom_population() {
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const filtered_sheet = ss.getSheetByName("排入考程的補考名單");
-    const [headers, ...data] = filtered_sheet.getDataRange().getValues();
+    const [headers, ...data] = filteredSheet.getDataRange().getValues();
     const session_column = headers.indexOf("節次");
     const class_column = headers.indexOf("班級");
     const big_bag_serial_column = headers.indexOf("大袋序號");
@@ -51,7 +49,7 @@ function calculate_classroom_population() {
 
     // 將資料寫回試算表
     set_range_values(
-        filtered_sheet.getRange(2, 1, data.length, data[0].length),
+        filteredSheet.getRange(2, 1, data.length, data[0].length),
         data
     );
 }

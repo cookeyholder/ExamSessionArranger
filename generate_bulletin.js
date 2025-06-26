@@ -1,11 +1,7 @@
 function generate_bulletin() {
     sort_by_classname();
 
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const parameters_sheet = ss.getSheetByName("參數區");
-    const bulletin_sheet = ss.getSheetByName("公告版補考場次");
-    const filtered_sheet = ss.getSheetByName("排入考程的補考名單");
-    const [headers, ...data] = filtered_sheet.getDataRange().getValues();
+    const [headers, ...data] = filteredSheet.getDataRange().getValues();
 
     const class_column = headers.indexOf("班級");
     const std_number_column = headers.indexOf("學號");
@@ -15,9 +11,9 @@ function generate_bulletin() {
     const classroom_column = headers.indexOf("試場");
 
     // 刪除多餘的欄和列
-    bulletin_sheet.clear();
-    if (bulletin_sheet.getMaxRows() > 5) {
-        bulletin_sheet.deleteRows(2, bulletin_sheet.getMaxRows() - 5);
+    bulletinSheet.clear();
+    if (bulletinSheet.getMaxRows() > 5) {
+        bulletinSheet.deleteRows(2, bulletinSheet.getMaxRows() - 5);
     }
 
     let modified_data = [["班級", "學號", "姓名", "科目", "節次", "試場"]];
@@ -48,7 +44,7 @@ function generate_bulletin() {
     });
 
     set_range_values(
-        bulletin_sheet.getRange(
+        bulletinSheet.getRange(
             2,
             1,
             modified_data.length,
@@ -61,31 +57,27 @@ function generate_bulletin() {
 }
 
 function prettier() {
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const bulletin_sheet = ss.getSheetByName("公告版補考場次");
-    const parameters_sheet = ss.getSheetByName("參數區");
+    const school_year = parametersSheet.getRange("B2").getValue();
+    const semester = parametersSheet.getRange("B3").getValue();
 
-    const school_year = parameters_sheet.getRange("B2").getValue();
-    const semester = parameters_sheet.getRange("B3").getValue();
-
-    bulletin_sheet.getRange("A1:F1").mergeAcross();
-    bulletin_sheet
+    bulletinSheet.getRange("A1:F1").mergeAcross();
+    bulletinSheet
         .getRange("A1")
         .setValue(
             "高雄高工" + school_year + "學年度第" + semester + "學期補考名單"
         );
-    bulletin_sheet.getRange("A1").setFontSize(20);
-    bulletin_sheet
+    bulletinSheet.getRange("A1").setFontSize(20);
+    bulletinSheet
         .getRange(
             1,
             1,
-            bulletin_sheet.getMaxRows(),
-            bulletin_sheet.getMaxColumns()
+            bulletinSheet.getMaxRows(),
+            bulletinSheet.getMaxColumns()
         )
         .setHorizontalAlignment("center");
-    bulletin_sheet.setFrozenRows(2);
-    bulletin_sheet.getRange("A2:F").createFilter();
-    bulletin_sheet
+    bulletinSheet.setFrozenRows(2);
+    bulletinSheet.getRange("A2:F").createFilter();
+    bulletinSheet
         .getRange("A2:F")
         .setBorder(
             true,

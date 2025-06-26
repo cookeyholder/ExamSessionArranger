@@ -1,9 +1,14 @@
 const ss = SpreadsheetApp.getActiveSpreadsheet();
-const filtered_sheet = ss.getSheetByName("排入考程的補考名單");
-const small_bag_sheet = ss.getSheetByName("小袋封面套印用資料");
-const big_bag_sheet = ss.getSheetByName("大袋封面套印用資料");
-const bulletin_sheet = ss.getSheetByName("公告版補考場次");
-const record_sheet = ss.getSheetByName("試場紀錄表(A表)");
+const parametersSheet = ss.getSheetByName("參數區");
+const prearrangedSheet = ss.getSheetByName("預先編排的科目及節次");
+const unfilteredSheet = ss.getSheetByName("註冊組補考名單");
+const candidateSheet = ss.getSheetByName("教學組排入考程的科目");
+const openSheet = ss.getSheetByName("開課資料(查詢任課教師用)");
+const filteredSheet = ss.getSheetByName("排入考程的補考名單");
+const smallBagSheet = ss.getSheetByName("小袋封面套印用資料");
+const bigBagSheet = ss.getSheetByName("大袋封面套印用資料");
+const bulletinSheet = ss.getSheetByName("公告版補考場次");
+const sessionRecordSheet = ss.getSheetByName("試場紀錄表(A表)");
 
 // 建立工作列選單
 function onOpen() {
@@ -32,7 +37,7 @@ function onOpen() {
         .addItem("1-6. 計算大、小袋編號", "bag_numbering")
         .addItem("1-7. 計算試場人數", "calculate_classroom_population")
         .addItem("1-8. 產生「公告版補考場次」", "generate_bulletin")
-        .addItem("1-9. 產生「試場記錄表」", "generate_record_sheet")
+        .addItem("1-9. 產生「試場記錄表」", "generate_sessionRecordSheet")
         .addItem("1-10. 產生「小袋封面套印用資料」", "generate_small_bag_data")
         .addItem("1-11. 產生「大袋封面套印用資料」", "generate_big_bag_data")
         .addToUi();
@@ -45,11 +50,11 @@ function initialize() {
     // (3) 填入欄位標題
 
     // 清除所有值
-    filtered_sheet.clear();
-    small_bag_sheet.clear();
-    big_bag_sheet.clear();
-    bulletin_sheet.clear();
-    record_sheet.clear();
+    filteredSheet.clear();
+    smallBagSheet.clear();
+    bigBagSheet.clear();
+    bulletinSheet.clear();
+    sessionRecordSheet.clear();
 
     // 將課程代碼補完，包括：「註冊組匯出的補考名單」、「開課資料(查詢任課教師用)」
     unfilted_code_complete();
@@ -77,14 +82,14 @@ function initialize() {
         "人工",
         "任課老師",
     ];
-    filtered_sheet.clear();
-    filtered_sheet.appendRow(headers);
+    filteredSheet.clear();
+    filteredSheet.appendRow(headers);
 
     // 移除已有篩選器，重新設置新的篩選器
-    if (filtered_sheet.getDataRange().getFilter()) {
-        filtered_sheet.getDataRange().getFilter().remove();
+    if (filteredSheet.getDataRange().getFilter()) {
+        filteredSheet.getDataRange().getFilter().remove();
     }
-    filtered_sheet.getDataRange().createFilter();
+    filteredSheet.getDataRange().createFilter();
 }
 
 // 一鍵產出公告用補考名單、試場記錄表
@@ -101,7 +106,7 @@ function all_in_one() {
     set_session_time();
     calculate_classroom_population();
     generate_bulletin();
-    generate_record_sheet();
+    generate_sessionRecordSheet();
 
     // Stop counting execution time
     newRuntime = runtime_count_stop(runtime_count_start);

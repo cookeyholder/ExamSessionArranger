@@ -1,11 +1,8 @@
 function arrange_commons_session() {
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const parameters_sheet = ss.getSheetByName("參數區");
-    const [param_headers, ...commonData] = parameters_sheet
+    const [param_headers, ...commonData] = parametersSheet
         .getRange(2, 5, 21, 2)
         .getValues();
-    const filtered_sheet = ss.getSheetByName("排入考程的補考名單");
-    const [headers, ...data] = filtered_sheet.getDataRange().getValues();
+    const [headers, ...data] = filteredSheet.getDataRange().getValues();
     const subject_column = headers.indexOf("科目名稱");
     const session_column = headers.indexOf("節次");
 
@@ -25,7 +22,7 @@ function arrange_commons_session() {
 
     if (modified_data.length == data.length) {
         set_range_values(
-            filtered_sheet.getRange(
+            filteredSheet.getRange(
                 2,
                 1,
                 modified_data.length,
@@ -51,12 +48,9 @@ function descending_sorting(a, b) {
 
 function arrangeProfessionsSession() {
     // 安排非共同科目的節次
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const filtered_sheet = ss.getSheetByName("排入考程的補考名單");
-    const [headers, ...data] = filtered_sheet.getDataRange().getValues();
+    const [headers, ...data] = filteredSheet.getDataRange().getValues();
     const session_column = headers.indexOf("節次");
 
-    const parametersSheet = ss.getSheetByName("參數區");
     const MAX_SESSION_NUMBER = parametersSheet.getRange("B5").getValue();
     const MAX_SESSION_STUDENTS =
         0.9 * parametersSheet.getRange("B9").getValue(); // 每節的最大學生數的 9 成
@@ -108,7 +102,7 @@ function arrangeProfessionsSession() {
 
     if (modified_data.length == data.length) {
         set_range_values(
-            filtered_sheet.getRange(
+            filteredSheet.getRange(
                 2,
                 1,
                 modified_data.length,

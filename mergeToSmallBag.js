@@ -7,10 +7,8 @@ function merge_to_small_bag() {
     generate_small_bag_data();
 
     const runtime_count_start = new Date();
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const parametersSheet = ss.getSheetByName("參數區");
-    const small_bag_sheet = ss.getSheetByName("小袋封面套印用資料");
-    const [headers, ...data] = small_bag_sheet.getDataRange().getValues();
+
+    const [headers, ...data] = smallBagSheet.getDataRange().getValues();
     const school_year = parametersSheet.getRange("B2").getValue();
     const semester = parametersSheet.getRange("B3").getValue();
     const folder_id = parametersSheet.getRange("B10").getValue();
@@ -201,9 +199,7 @@ function merge_to_small_bag() {
 }
 
 function get_students(small_bag_serial) {
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const filtered_sheet = ss.getSheetByName("排入考程的補考名單");
-    const [headers, ...data] = filtered_sheet.getDataRange().getValues();
+    const [headers, ...data] = filteredSheet.getDataRange().getValues();
     const small_bag_serial_column = headers.indexOf("小袋序號");
     const class_column = headers.indexOf("班級");
     const std_number_column = headers.indexOf("學號");

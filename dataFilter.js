@@ -1,27 +1,22 @@
 function get_filtered_data() {
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const unfiltered_sheet = ss.getSheetByName("註冊組補考名單");
-    const candidate_sheet = ss.getSheetByName("教學組排入考程的科目");
-    const open_sheet = ss.getSheetByName("開課資料(查詢任課教師用)");
-    const filtered_sheet = ss.getSheetByName("排入考程的補考名單");
     const [candidate_subject_headers, ...candidate_subjects_data] =
-        candidate_sheet.getDataRange().getValues();
-    const [unfiltered_sheetHeaders, ...unfiltered_data] = unfiltered_sheet
+        candidateSheet.getDataRange().getValues();
+    const [unfilteredSheetHeaders, ...unfiltered_data] = unfilteredSheet
         .getDataRange()
         .getValues();
-    const [open_sheet_headers, ...open_data] = open_sheet
+    const [openSheet_headers, ...open_data] = openSheet
         .getDataRange()
         .getValues();
 
-    const std_number_column = unfiltered_sheetHeaders.indexOf("學號");
-    const class_column = unfiltered_sheetHeaders.indexOf("班級");
-    const seat_number_column = unfiltered_sheetHeaders.indexOf("座號");
-    const std_name_column = unfiltered_sheetHeaders.indexOf("姓名");
-    const subject_name_column = unfiltered_sheetHeaders.indexOf("科目名稱");
-    const code_column = unfiltered_sheetHeaders.indexOf("科目代碼補完");
-    const open_class_column = open_sheet_headers.indexOf("班級名稱");
-    const open_subject_name_column = open_sheet_headers.indexOf("科目名稱");
-    const teacher_column = open_sheet_headers.indexOf("任課教師");
+    const std_number_column = unfilteredSheetHeaders.indexOf("學號");
+    const class_column = unfilteredSheetHeaders.indexOf("班級");
+    const seat_number_column = unfilteredSheetHeaders.indexOf("座號");
+    const std_name_column = unfilteredSheetHeaders.indexOf("姓名");
+    const subject_name_column = unfilteredSheetHeaders.indexOf("科目名稱");
+    const code_column = unfilteredSheetHeaders.indexOf("科目代碼補完");
+    const open_class_column = openSheet_headers.indexOf("班級名稱");
+    const open_subject_name_column = openSheet_headers.indexOf("科目名稱");
+    const teacher_column = openSheet_headers.indexOf("任課教師");
 
     const make_up_column = candidate_subject_headers.indexOf("要補考");
     const filtered_code_column = candidate_subject_headers.indexOf("課程代碼");
@@ -89,7 +84,7 @@ function get_filtered_data() {
         }
     });
 
-    filtered_sheet
+    filteredSheet
         .getRange(2, 1, nameList.length, nameList[0].length)
         .setNumberFormat("@STRING@") // 改成純文字格式，以免 0 開頭的學號被去掉前面的 0，造成位數錯誤
         .setValues(nameList);
