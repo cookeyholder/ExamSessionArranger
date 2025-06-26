@@ -1,3 +1,10 @@
+const ss = SpreadsheetApp.getActiveSpreadsheet();
+const filtered_sheet = ss.getSheetByName("排入考程的補考名單");
+const small_bag_sheet = ss.getSheetByName("小袋封面套印用資料");
+const big_bag_sheet = ss.getSheetByName("大袋封面套印用資料");
+const bulletin_sheet = ss.getSheetByName("公告版補考場次");
+const record_sheet = ss.getSheetByName("試場紀錄表(A表)");
+
 // 建立工作列選單
 function onOpen() {
     SpreadsheetApp.getUi()
@@ -36,13 +43,6 @@ function initialize() {
     // (1) 清除所有儲存格內容
     // (2) 刪除多餘的列到只剩5列
     // (3) 填入欄位標題
-
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const filtered_sheet = ss.getSheetByName("排入考程的補考名單");
-    const small_bag_sheet = ss.getSheetByName("小袋封面套印用資料");
-    const big_bag_sheet = ss.getSheetByName("大袋封面套印用資料");
-    const bulletin_sheet = ss.getSheetByName("公告版補考場次");
-    const record_sheet = ss.getSheetByName("試場紀錄表(A表)");
 
     // 清除所有值
     filtered_sheet.clear();
