@@ -12,8 +12,8 @@ function generate_small_bag_data() {
     const subject_name_column = headers.indexOf("科目名稱");
     const teacher_column = headers.indexOf("任課老師");
     const small_bag_population_column = headers.indexOf("小袋人數");
-    const bycomputer_column = headers.indexOf("電腦");
-    const byhand_column = headers.indexOf("人工");
+    const isComputerGradedColumn = headers.indexOf("電腦");
+    const isManualGradedColumn = headers.indexOf("人工");
 
     smallBagSheet.clear();
 
@@ -53,8 +53,8 @@ function generate_small_bag_data() {
                 row[subject_name_column],
                 row[teacher_column],
                 row[small_bag_population_column],
-                row[bycomputer_column],
-                row[byhand_column],
+                row[isComputerGradedColumn],
+                row[isManualGradedColumn],
             ];
 
             small_bags.push(tmp);

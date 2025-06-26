@@ -28,8 +28,8 @@ function merge_to_small_bag() {
     const subject_name_column = headers.indexOf("科目名稱");
     const teacher_column = headers.indexOf("任課老師");
     const small_bag_population_column = headers.indexOf("小袋人數");
-    const bycomputer_column = headers.indexOf("電腦");
-    const byhand_column = headers.indexOf("人工");
+    const isComputerGradedColumn = headers.indexOf("電腦");
+    const isManualGradedColumn = headers.indexOf("人工");
 
     const BATCH_SIZE = 50; // 每個 PDF 檔的頁數，太大或太小的數字都會減慢整體速度
     const number_of_digits = data.length.toString().length;
@@ -64,8 +64,8 @@ function merge_to_small_bag() {
             "«班級人數»",
             data[i][small_bag_population_column]
         );
-        tmp_body_1.replaceText("«電腦»", data[i][bycomputer_column]);
-        tmp_body_1.replaceText("«人工»", data[i][byhand_column]);
+        tmp_body_1.replaceText("«電腦»", data[i][isComputerGradedColumn]);
+        tmp_body_1.replaceText("«人工»", data[i][isManualGradedColumn]);
 
         let tmp_table = tmp_body_1.getTables()[0];
         let students_list = get_students(data[i][small_bag_serial_column]);

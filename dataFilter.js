@@ -1,34 +1,37 @@
 function get_filtered_data() {
-    const [candidate_subject_headers, ...candidate_subjects_data] =
-        candidateSheet.getDataRange().getValues();
+    // 取得「註冊組補考名單」的欄位索引
     const [unfilteredSheetHeaders, ...unfiltered_data] = unfilteredSheet
         .getDataRange()
         .getValues();
-    const [openSheet_headers, ...open_data] = openSheet
-        .getDataRange()
-        .getValues();
-
     const std_number_column = unfilteredSheetHeaders.indexOf("學號");
     const class_column = unfilteredSheetHeaders.indexOf("班級");
     const seat_number_column = unfilteredSheetHeaders.indexOf("座號");
     const std_name_column = unfilteredSheetHeaders.indexOf("姓名");
     const subject_name_column = unfilteredSheetHeaders.indexOf("科目名稱");
     const code_column = unfilteredSheetHeaders.indexOf("科目代碼補完");
+
+    // 取得「開課資料」的欄位索引
+    const [openSheet_headers, ...open_data] = openSheet
+        .getDataRange()
+        .getValues();
     const open_class_column = openSheet_headers.indexOf("班級名稱");
     const open_subject_name_column = openSheet_headers.indexOf("科目名稱");
     const teacher_column = openSheet_headers.indexOf("任課教師");
 
+    // 取得「教學組排入考程的科目」的欄位索引
+    const [candidate_subject_headers, ...candidate_subjects_data] =
+        candidateSheet.getDataRange().getValues();
     const make_up_column = candidate_subject_headers.indexOf("要補考");
     const filtered_code_column = candidate_subject_headers.indexOf("課程代碼");
-    const bycomputer_column = candidate_subject_headers.indexOf("電腦");
-    const byhand_column = candidate_subject_headers.indexOf("人工");
+    const isComputerGradedColumn = candidate_subject_headers.indexOf("電腦");
+    const isManualGradedColumn = candidate_subject_headers.indexOf("人工");
 
     let candidate_subjects = {};
     candidate_subjects_data.forEach(function (row) {
         if (row[make_up_column] == true) {
             candidate_subjects[row[filtered_code_column]] = {
-                bycomputer: row[bycomputer_column],
-                byhand: row[byhand_column],
+                isComputerGraded: row[isComputerGradedColumn],
+                isManualGraded: row[isManualGradedColumn],
             };
         }
     });
@@ -72,8 +75,12 @@ function get_filtered_data() {
                 "", // 大袋人數
                 "", // 班級人數
                 "", // 時間
-                candidate_subjects[row[code_column]]["bycomputer"] ? "☑" : "☐", // 電腦
-                candidate_subjects[row[code_column]]["byhand"] ? "☑" : "☐", //人工
+                candidate_subjects[row[code_column]]["isComputerGraded"]
+                    ? "☑"
+                    : "☐", // 電腦
+                candidate_subjects[row[code_column]]["isManualGraded"]
+                    ? "☑"
+                    : "☐", //人工
                 open_teacher[
                     row[class_column].toString() +
                         row[subject_name_column].toString()
