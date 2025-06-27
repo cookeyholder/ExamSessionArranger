@@ -16,7 +16,7 @@ function onOpen() {
     SpreadsheetApp.getUi()
         .createMenu("補考節次試場編排小幫手")
         .addItem("註冊組補考名單課程代碼補完", "completeUnfilteredSheetCode")
-        .addItem("開課資料課程代碼補完", "open_code_complete")
+        .addItem("開課資料課程代碼補完", "completeOpenSheetCode")
         .addSeparator()
         .addItem("步驟 1. 產出公告用補考名單、試場記錄表", "all_in_one")
         .addItem("步驟 2. 產生合併列印小袋封面(要很久哦)", "merge_to_small_bag")
@@ -59,7 +59,7 @@ function initialize() {
 
     // 將課程代碼補完，包括：「註冊組匯出的補考名單」、「開課資料(查詢任課教師用)」
     completeUnfilteredSheetCode();
-    open_code_complete();
+    completeOpenSheetCode();
 
     // 清空資料並設置標題列
     const headers = [

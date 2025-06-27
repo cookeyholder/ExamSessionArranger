@@ -105,17 +105,21 @@ function completeUnfilteredSheetCode() {
         : handleError();
 }
 
-function open_code_complete() {
+/**
+ * 開課資料工作表的課程代碼補完。
+ * @returns {void}
+ */
+function completeOpenSheetCode() {
     const [openSheetHeaders, ...openData] = openSheet
         .getDataRange()
         .getValues();
 
     const classNameColumnIndex = openSheetHeaders.indexOf("班級名稱");
     const subjectCodeColumnIndex = openSheetHeaders.indexOf("科目代碼");
-    const complete_column = openSheetHeaders.indexOf("科目代碼補完");
+    const completeColumnIndex = openSheetHeaders.indexOf("科目代碼補完");
     const subjectNameColumnIndex = openSheetHeaders.indexOf("科目名稱");
 
-    const department_to_group = {
+    const departmentToGroup = {
         301: "21",
         303: "22",
         305: "23",
@@ -134,41 +138,65 @@ function open_code_complete() {
         三: parseInt(configs["學年度"]) - 2,
     };
 
-    let modified_data = [];
-    openData.forEach(function (row) {
-        let tmp = row[subjectCodeColumnIndex];
-        if (row[subjectCodeColumnIndex].length == 16) {
-            row[complete_column] =
-                tmp.slice(0, 3) +
-                "553401" +
-                tmp.slice(3, 9) +
-                "0" +
-                tmp.slice(9);
-        } else {
-            row[complete_column] =
-                yearOfGrade[row[classNameColumnIndex].toString().slice(2, 3)] +
-                "553401V" +
-                department_to_group[tmp.slice(0, 3)] +
-                tmp.slice(0, 3) +
-                "0" +
-                tmp.slice(3);
-        }
+    const getGradeFromClassName = (className) =>
+        className.toString().slice(2, 3);
 
-        modified_data.push(row);
-    });
+    const getDepartmentCode = (subjectCode) => subjectCode.slice(0, 3);
 
-    if (modified_data.length == openData.length) {
-        setRangeValues(
-            openSheet.getRange(
-                2,
-                1,
-                modified_data.length,
-                modified_data[0].length
-            ),
-            modified_data
+    const buildLongCode = (subjectCode) =>
+        subjectCode.slice(0, 3) +
+        "553401" +
+        subjectCode.slice(3, 9) +
+        "0" +
+        subjectCode.slice(9);
+
+    const buildShortCode = (subjectCode, className) => {
+        const grade = getGradeFromClassName(className);
+        const departmentCode = getDepartmentCode(subjectCode);
+
+        return (
+            yearOfGrade[grade] +
+            "553401V" +
+            departmentToGroup[departmentCode] +
+            subjectCode.slice(0, 3) +
+            "0" +
+            subjectCode.slice(3)
         );
-    } else {
-        Logger.log("開課資料課程代碼補完失敗！");
-        SpreadsheetApp.getUi().alert("開課資料課程代碼補完失敗！");
-    }
+    };
+
+    const completeSubjectCode = (subjectCode, className) =>
+        subjectCode.length === 16
+            ? buildLongCode(subjectCode)
+            : buildShortCode(subjectCode, className);
+
+    const processRow = (row) => {
+        const updatedRow = [...row];
+        const subjectCode = row[subjectCodeColumnIndex];
+        const className = row[classNameColumnIndex];
+
+        updatedRow[completeColumnIndex] = completeSubjectCode(
+            subjectCode,
+            className
+        );
+        return updatedRow;
+    };
+
+    const modifiedData = openData.map(processRow);
+
+    const writeResults = (data) => {
+        setRangeValues(
+            openSheet.getRange(2, 1, data.length, data[0].length),
+            data
+        );
+        Logger.log("(completeOpenSheetCode) 開課資料工作表課程代碼補完成功！");
+    };
+
+    const handleError = () => {
+        Logger.log("(completeOpenSheetCode) 開課資料工作表課程代碼補完失敗！");
+        SpreadsheetApp.getUi().alert("開課資料工作表課程代碼補完失敗！");
+    };
+
+    modifiedData.length === openData.length
+        ? writeResults(modifiedData)
+        : handleError();
 }
