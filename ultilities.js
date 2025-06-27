@@ -21,10 +21,10 @@ function getConfigs() {
     return configs;
 }
 
-function runtime_count_stop(start) {
-    let stop = new Date();
-    let newRuntime = Number(stop) - Number(start);
-    return Math.ceil(newRuntime / 1000);
+function calculateElapsedTimeInSeconds(startTime) {
+	let stopTime = new Date();
+	let newRuntime = Number(stopTime) - Number(startTime);
+	return Math.ceil(newRuntime / 1000);
 }
 
 function count_time_consume(runner) {

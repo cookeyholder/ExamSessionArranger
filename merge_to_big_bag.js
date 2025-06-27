@@ -148,7 +148,7 @@ function merge_to_big_bag() {
     }
     merged_file.setTrashed(true);
 
-    newRuntime = runtime_count_stop(runtime_count_start);
+    newRuntime = calculateElapsedTimeInSeconds(runtime_count_start);
     SpreadsheetApp.getUi().alert(
         "已完成大袋封面合併列印，共" +
             data.length +

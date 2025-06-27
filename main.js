@@ -93,10 +93,12 @@ function initialize() {
     filteredSheet.getDataRange().createFilter();
 }
 
-// 一鍵產出公告用補考名單、試場記錄表
+/**
+ * 一鍵產出公告用補考名單、試場記錄表
+ * @returns {void}
+ */
 function all_in_one() {
-    // Start counting execution time
-    let runtime_count_start = new Date();
+    const startTime = new Date();
 
     getFilteredData(); // 篩選出列入考程的科目
     arrange_commons_session(); // 安排物理、國、英、數、資訊科技、史地的節次
@@ -109,8 +111,9 @@ function all_in_one() {
     generate_bulletin();
     generate_sessionRecordSheet();
 
-    // Stop counting execution time
-    newRuntime = runtime_count_stop(runtime_count_start);
+    newRuntime = calculateElapsedTimeInSeconds(startTime);
 
-    SpreadsheetApp.getUi().alert("已完成編排，共使用" + newRuntime + "秒");
+    SpreadsheetApp.getUi().alert(
+        "(all_in_one) 已完成補考場次編排，共使用" + newRuntime + "秒"
+    );
 }
