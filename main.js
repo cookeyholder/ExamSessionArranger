@@ -18,7 +18,7 @@ function onOpen() {
         .addItem("註冊組補考名單課程代碼補完", "completeUnfilteredSheetCode")
         .addItem("開課資料課程代碼補完", "completeOpenSheetCode")
         .addSeparator()
-        .addItem("步驟 1. 產出公告用補考名單、試場記錄表", "all_in_one")
+        .addItem("步驟 1. 產出公告用補考名單、試場記錄表", "generateCompleteExamArrangement")
         .addItem("步驟 2. 產生合併列印小袋封面(要很久哦)", "merge_to_small_bag")
         .addItem(
             "產生合併大袋封面用資料(人工輸入監考教師)",
@@ -97,7 +97,7 @@ function initialize() {
  * 一鍵產出公告用補考名單、試場記錄表
  * @returns {void}
  */
-function all_in_one() {
+function generateCompleteExamArrangement() {
     const startTime = new Date();
 
     getFilteredData(); // 篩選出列入考程的科目
@@ -114,6 +114,6 @@ function all_in_one() {
     newRuntime = calculateElapsedTimeInSeconds(startTime);
 
     SpreadsheetApp.getUi().alert(
-        "(all_in_one) 已完成補考場次編排，共使用" + newRuntime + "秒"
+        "(generateCompleteExamArrangement) 已完成補考場次編排，共使用" + newRuntime + "秒"
     );
 }
