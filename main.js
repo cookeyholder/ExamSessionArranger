@@ -9,12 +9,13 @@ const smallBagSheet = ss.getSheetByName("小袋封面套印用資料");
 const bigBagSheet = ss.getSheetByName("大袋封面套印用資料");
 const bulletinSheet = ss.getSheetByName("公告版補考場次");
 const sessionRecordSheet = ss.getSheetByName("試場紀錄表(A表)");
+const configs = getConfigs();
 
 // 建立工作列選單
 function onOpen() {
     SpreadsheetApp.getUi()
         .createMenu("補考節次試場編排小幫手")
-        .addItem("註冊組補考名單課程代碼補完", "unfilted_code_complete")
+        .addItem("註冊組補考名單課程代碼補完", "completeUnfilteredSheetCode")
         .addItem("開課資料課程代碼補完", "open_code_complete")
         .addSeparator()
         .addItem("步驟 1. 產出公告用補考名單、試場記錄表", "all_in_one")
@@ -57,7 +58,7 @@ function initialize() {
     sessionRecordSheet.clear();
 
     // 將課程代碼補完，包括：「註冊組匯出的補考名單」、「開課資料(查詢任課教師用)」
-    unfilted_code_complete();
+    completeUnfilteredSheetCode();
     open_code_complete();
 
     // 清空資料並設置標題列

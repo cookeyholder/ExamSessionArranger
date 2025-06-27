@@ -43,7 +43,7 @@ function generate_bulletin() {
         modified_data.push(tmp);
     });
 
-    set_range_values(
+    setRangeValues(
         bulletinSheet.getRange(
             2,
             1,

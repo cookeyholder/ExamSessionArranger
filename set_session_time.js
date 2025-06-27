@@ -19,7 +19,7 @@ function set_session_time() {
     });
 
     if (modified_data.length == data.length) {
-        set_range_values(
+        setRangeValues(
             filteredSheet.getRange(
                 2,
                 1,

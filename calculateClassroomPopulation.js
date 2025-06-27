@@ -48,7 +48,7 @@ function calculate_classroom_population() {
     });
 
     // 將資料寫回試算表
-    set_range_values(
+    setRangeValues(
         filteredSheet.getRange(2, 1, data.length, data[0].length),
         data
     );

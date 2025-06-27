@@ -1,14 +1,16 @@
-function unfilted_code_complete() {
+function completeUnfilteredSheetCode() {
     const [unfilteredSheetHeaders, ...unfilteredData] = unfilteredSheet
         .getDataRange()
         .getValues();
 
-    const classNameColumn = unfilteredSheetHeaders.indexOf("班級");
-    const subject_column = unfilteredSheetHeaders.indexOf("科目");
-    const subjectCodeColumn = unfilteredSheetHeaders.indexOf("科目代碼補完");
-    const subjectNameColumn = unfilteredSheetHeaders.indexOf("科目名稱");
+    const classNameColumnIndex = unfilteredSheetHeaders.indexOf("班級");
+    const subjectCodeAndNameColumnIndex =
+        unfilteredSheetHeaders.indexOf("科目");
+    const subjectCodeColumnIndex =
+        unfilteredSheetHeaders.indexOf("科目代碼補完");
+    const subjectNameColumnIndex = unfilteredSheetHeaders.indexOf("科目名稱");
 
-    const department_to_group = {
+    const groupCodeOfDepartment = {
         301: "21",
         303: "22",
         305: "23",
@@ -21,49 +23,57 @@ function unfilted_code_complete() {
         374: "21",
     };
 
-    const grade_to_year = {
-        一: parseInt(parametersSheet.getRange("B2").getValue()),
-        二: parseInt(parametersSheet.getRange("B2").getValue()) - 1,
-        三: parseInt(parametersSheet.getRange("B2").getValue()) - 2,
+    const yearOfGrade = {
+        一: parseInt(configs["學年度"]),
+        二: parseInt(configs["學年度"]) - 1,
+        三: parseInt(configs["學年度"]) - 2,
     };
 
-    let modified_data = [];
-    unfilteredData.forEach(function (row) {
-        let tmp = row[subject_column].toString().split(".")[0];
-        if (tmp.length == 16) {
-            row[subjectCodeColumn] =
-                tmp.slice(0, 3) +
-                "553401" +
-                tmp.slice(3, 9) +
+    let codeNamePairs = unfilteredData.map((row) => {
+        let [codeString, nameString] = row[subjectCodeAndNameColumnIndex]
+            .toString()
+            .split(".");
+
+        if (codeString.length == 16) {
+            code =
+                codeString.slice(0, 3) +
+                configs["學校代碼"] +
+                codeString.slice(3, 9) +
                 "0" +
-                tmp.slice(9);
+                codeString.slice(9);
         } else {
-            row[subjectCodeColumn] =
-                grade_to_year[row[classNameColumn].toString().slice(2, 3)] +
+            code =
+                yearOfGrade[row[classNameColumnIndex].toString().slice(2, 3)] +
                 "553401V" +
-                department_to_group[tmp.slice(0, 3)] +
-                tmp.slice(0, 3) +
+                groupCodeOfDepartment[codeString.slice(0, 3)] +
+                codeString.slice(0, 3) +
                 "0" +
-                tmp.slice(3);
+                codeString.slice(3);
         }
 
-        row[subjectNameColumn] = row[subject_column].toString().split(".")[1];
-        modified_data.push(row);
+        return [code, nameString];
     });
 
-    if (modified_data.length == unfilteredData.length) {
-        set_range_values(
+    if (codeNamePairs.length == unfilteredData.length) {
+        setRangeValues(
             unfilteredSheet.getRange(
                 2,
-                1,
-                modified_data.length,
-                modified_data[0].length
+                13,
+                codeNamePairs.length,
+                codeNamePairs[0].length
             ),
-            modified_data
+            codeNamePairs
+        );
+        Logger.log(
+            "(completeUnfilteredSheetCode) 註冊組補考名單工作表的課程代碼補完成功！"
         );
     } else {
-        Logger.log("課程代碼補完失敗！");
-        SpreadsheetApp.getUi().alert("課程代碼補完失敗！");
+        Logger.log(
+            "(completeUnfilteredSheetCode) 註冊組補考名單工作表的課程代碼補完失敗！"
+        );
+        SpreadsheetApp.getUi().alert(
+            "註冊組補考名單工作表的課程代碼補完失敗！"
+        );
     }
 }
 
@@ -72,10 +82,10 @@ function open_code_complete() {
         .getDataRange()
         .getValues();
 
-    const classNameColumn = openSheetHeaders.indexOf("班級名稱");
-    const subjectCodeColumn = openSheetHeaders.indexOf("科目代碼");
+    const classNameColumnIndex = openSheetHeaders.indexOf("班級名稱");
+    const subjectCodeColumnIndex = openSheetHeaders.indexOf("科目代碼");
     const complete_column = openSheetHeaders.indexOf("科目代碼補完");
-    const subjectNameColumn = openSheetHeaders.indexOf("科目名稱");
+    const subjectNameColumnIndex = openSheetHeaders.indexOf("科目名稱");
 
     const department_to_group = {
         301: "21",
@@ -90,16 +100,16 @@ function open_code_complete() {
         374: "21",
     };
 
-    const grade_to_year = {
-        一: parseInt(parametersSheet.getRange("B2").getValue()),
-        二: parseInt(parametersSheet.getRange("B2").getValue()) - 1,
-        三: parseInt(parametersSheet.getRange("B2").getValue()) - 2,
+    const yearOfGrade = {
+        一: parseInt(configs["學年度"]),
+        二: parseInt(configs["學年度"]) - 1,
+        三: parseInt(configs["學年度"]) - 2,
     };
 
     let modified_data = [];
     openData.forEach(function (row) {
-        let tmp = row[subjectCodeColumn];
-        if (row[subjectCodeColumn].length == 16) {
+        let tmp = row[subjectCodeColumnIndex];
+        if (row[subjectCodeColumnIndex].length == 16) {
             row[complete_column] =
                 tmp.slice(0, 3) +
                 "553401" +
@@ -108,7 +118,7 @@ function open_code_complete() {
                 tmp.slice(9);
         } else {
             row[complete_column] =
-                grade_to_year[row[classNameColumn].toString().slice(2, 3)] +
+                yearOfGrade[row[classNameColumnIndex].toString().slice(2, 3)] +
                 "553401V" +
                 department_to_group[tmp.slice(0, 3)] +
                 tmp.slice(0, 3) +
@@ -120,7 +130,7 @@ function open_code_complete() {
     });
 
     if (modified_data.length == openData.length) {
-        set_range_values(
+        setRangeValues(
             openSheet.getRange(
                 2,
                 1,

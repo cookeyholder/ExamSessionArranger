@@ -1,3 +1,26 @@
+/**
+ * 取得參數設定表中的配置。
+ * 這個函數會讀取名為 "參數設定" 的工作表，並將第一列的值作為鍵，第二列的值作為對應的值，
+ * 返回一個包含所有配置的物件。
+ *
+ * @returns {Object} 包含參數設定的物件。
+ */
+function getConfigs() {
+    let configs = {};
+    parametersSheet
+        .getDataRange()
+        .getValues()
+        .reduce(function (acc, row) {
+            if (row[0] && row[1]) {
+                acc[row[0]] = row[1];
+            }
+            return acc;
+        }, configs);
+
+    Logger.log("(getConfigs) configs: " + JSON.stringify(configs));
+    return configs;
+}
+
 function runtime_count_stop(start) {
     let stop = new Date();
     let newRuntime = Number(stop) - Number(start);
@@ -12,11 +35,37 @@ function count_time_consume(runner) {
     return runtime;
 }
 
-function set_range_values(range, data) {
-    if (range.getLastColumn() == data[0].length) {
+/** * 設定指定範圍的值。
+ * 如果範圍的行數與數據的行數不匹配，則會顯示一個警告對話框。
+ * @param {Range} range - 要設置值的範圍。
+ * @param {Array} data - 要設置的數據，應為二維數組。
+ */
+function setRangeValues(range, data) {
+    if (
+        range.getNumRows() == data.length &&
+        range.getNumColumns() == data[0].length
+    ) {
         range.setValues(data);
+        return true;
     } else {
-        SpreadsheetApp.getUi().alert("欲寫入範圍欄數不足！");
+        Logger.log("(setRangeValues) 欲寫入的範圍大小和 data 的大小不一致！");
+        // 顯示 range 的大小
+        Logger.log(
+            "(setRangeValues) 欲寫入的範圍大小: " +
+                range.getNumRows() +
+                "列 x " +
+                range.getNumColumns() +
+                "行"
+        );
+        Logger.log(
+            "(setRangeValues) 欲寫入的 data 大小: " +
+                data.length +
+                "列 x " +
+                data[0].length +
+                "行"
+        );
+        SpreadsheetApp.getUi().alert("欲寫入的範圍大小和 data 的大小不一致！");
+        return false;
     }
 }
 
@@ -98,7 +147,7 @@ function checkShowedBoxes() {
         }
     }
 
-    set_range_values(data_range, data_values);
+    setRangeValues(data_range, data_values);
 }
 
 function cancelCheckboxes() {
@@ -117,7 +166,7 @@ function cancelCheckboxes() {
         }
     }
 
-    set_range_values(data_range, data_values);
+    setRangeValues(data_range, data_values);
 }
 
 function descending_population(a, b) {
@@ -207,7 +256,7 @@ function create_classroom() {
 
 function create_session() {
     // session 物件工廠，用來產生下面的 get_session_statistic 函數中，需要建立 9 個 session 物件
-    const MAX_CLASSROOM_NUMBER = parametersSheet.getRange("B6").getValue();
+    const MAX_CLASSROOM_NUMBER = parseInt(configs["試場數量"]);
     const session = {
         classrooms: [],
         students: [],
@@ -251,7 +300,7 @@ function create_session() {
 function get_session_statistics() {
     const [headers, ...data] = filteredSheet.getDataRange().getValues();
     const session_column = headers.indexOf("節次");
-    const MAX_SESSION_NUMBER = parametersSheet.getRange("B5").getValue();
+    const MAX_SESSION_NUMBER = parserseInt(configs["節數上限"]);
 
     const sessions = [];
     for (let i = 0; i < MAX_SESSION_NUMBER + 2; i++) {

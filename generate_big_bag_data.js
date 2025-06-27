@@ -75,7 +75,7 @@ function generate_big_bag_data() {
         }
     });
 
-    set_range_values(
+    setRangeValues(
         bigBagSheet.getRange(1, 1, big_bags.length, big_bags[0].length),
         big_bags
     );

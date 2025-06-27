@@ -67,7 +67,7 @@ function generate_sessionRecordSheet() {
         ]);
     });
 
-    set_range_values(
+    setRangeValues(
         sessionRecordSheet.getRange(
             1,
             1,

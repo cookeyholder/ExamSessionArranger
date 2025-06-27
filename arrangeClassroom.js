@@ -94,7 +94,7 @@ function arrangeClassroom() {
     }
 
     if (modified_data.length == data.length) {
-        set_range_values(
+        setRangeValues(
             filteredSheet.getRange(
                 2,
                 1,

@@ -21,7 +21,7 @@ function arrange_commons_session() {
     });
 
     if (modified_data.length == data.length) {
-        set_range_values(
+        setRangeValues(
             filteredSheet.getRange(
                 2,
                 1,
@@ -101,7 +101,7 @@ function arrangeProfessionsSession() {
     }
 
     if (modified_data.length == data.length) {
-        set_range_values(
+        setRangeValues(
             filteredSheet.getRange(
                 2,
                 1,
