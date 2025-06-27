@@ -1,3 +1,7 @@
+/**
+ * 註冊組補考名單工作表的課程代碼補完。
+ * @returns {void}
+ */
 function completeUnfilteredSheetCode() {
     const [unfilteredSheetHeaders, ...unfilteredData] = unfilteredSheet
         .getDataRange()
@@ -29,52 +33,76 @@ function completeUnfilteredSheetCode() {
         三: parseInt(configs["學年度"]) - 2,
     };
 
-    let codeNamePairs = unfilteredData.map((row) => {
-        let [codeString, nameString] = row[subjectCodeAndNameColumnIndex]
-            .toString()
-            .split(".");
+    const parseSubjectCodeAndName = (subjectCodeAndName) =>
+        subjectCodeAndName.toString().split(".");
 
-        if (codeString.length == 16) {
-            code =
-                codeString.slice(0, 3) +
-                configs["學校代碼"] +
-                codeString.slice(3, 9) +
-                "0" +
-                codeString.slice(9);
-        } else {
-            code =
-                yearOfGrade[row[classNameColumnIndex].toString().slice(2, 3)] +
-                "553401V" +
-                groupCodeOfDepartment[codeString.slice(0, 3)] +
-                codeString.slice(0, 3) +
-                "0" +
-                codeString.slice(3);
-        }
+    const getGradeFromClassName = (className) =>
+        className.toString().slice(2, 3);
 
-        return [code, nameString];
-    });
+    const getDepartmentCodeFromSubject = (codeString) => codeString.slice(0, 3);
 
-    if (codeNamePairs.length == unfilteredData.length) {
+    const buildLongCode = (codeString, schoolCode) =>
+        codeString.slice(0, 3) +
+        schoolCode +
+        codeString.slice(3, 9) +
+        "0" +
+        codeString.slice(9);
+
+    const buildShortCode = (codeString, className) => {
+        const grade = getGradeFromClassName(className);
+        const departmentCode = getDepartmentCodeFromSubject(codeString);
+
+        return (
+            yearOfGrade[grade] +
+            "553401V" +
+            groupCodeOfDepartment[departmentCode] +
+            codeString.slice(0, 3) +
+            "0" +
+            codeString.slice(3)
+        );
+    };
+
+    const completeCode = (codeString, className) =>
+        codeString.length === 16
+            ? buildLongCode(codeString, configs["學校代碼"])
+            : buildShortCode(codeString, className);
+
+    const processRow = (row) => {
+        const [codeString, nameString] = parseSubjectCodeAndName(
+            row[subjectCodeAndNameColumnIndex]
+        );
+        const completedCode = completeCode(
+            codeString,
+            row[classNameColumnIndex]
+        );
+
+        return [completedCode, nameString];
+    };
+
+    const codeNamePairs = unfilteredData.map(processRow);
+
+    const writeResults = (pairs) => {
         setRangeValues(
-            unfilteredSheet.getRange(
-                2,
-                13,
-                codeNamePairs.length,
-                codeNamePairs[0].length
-            ),
-            codeNamePairs
+            unfilteredSheet.getRange(2, 13, pairs.length, pairs[0].length),
+            pairs
         );
         Logger.log(
             "(completeUnfilteredSheetCode) 註冊組補考名單工作表的課程代碼補完成功！"
         );
-    } else {
+    };
+
+    const handleError = () => {
         Logger.log(
             "(completeUnfilteredSheetCode) 註冊組補考名單工作表的課程代碼補完失敗！"
         );
         SpreadsheetApp.getUi().alert(
             "註冊組補考名單工作表的課程代碼補完失敗！"
         );
-    }
+    };
+
+    codeNamePairs.length === unfilteredData.length
+        ? writeResults(codeNamePairs)
+        : handleError();
 }
 
 function open_code_complete() {
