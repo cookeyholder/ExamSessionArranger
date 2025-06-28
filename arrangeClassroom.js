@@ -1,3 +1,18 @@
+/**
+ * 對兩個數組進行降序排序, 比較第二個(index 為 1)的元素。
+ * @param {Array} a - 第一個數組。
+ * @param {Array} b - 第二個數組。
+ * @returns {number} - 返回比較結果，負數表示 a 在 b 前，
+ *                     正數表示 b 在 a 前，0 表示相等。
+ */
+function descending_sorting(a, b) {
+    if (a[1] === b[1]) {
+        return 0;
+    } else {
+        return a[1] < b[1] ? 1 : -1;
+    }
+}
+
 function arrangeClassroom() {
     const [headers, ...data] = filteredSheet.getDataRange().getValues();
     const classNameColumn = headers.indexOf("班級");
