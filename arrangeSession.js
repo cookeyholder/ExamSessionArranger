@@ -28,11 +28,13 @@ function getCommonSubjectSessions() {
 function arrangeCommonSubjectSessions() {
     const commonSessions = getCommonSubjectSessions();
 
-    const [headers, ...data] = filteredSheet.getDataRange().getValues();
-    const subjectNameColumn = headers.indexOf("科目名稱");
-    const sessionColumn = headers.indexOf("節次");
+    const [filteredHeaders, ...filteredData] = filteredSheet
+        .getDataRange()
+        .getValues();
+    const subjectNameColumn = filteredHeaders.indexOf("科目名稱");
+    const sessionColumn = filteredHeaders.indexOf("節次");
 
-    const modifiedData = data.map(function (row) {
+    const modifiedData = filteredData.map(function (row) {
         if (commonSessions[row[subjectNameColumn]] == null) {
             return row;
         } else {
@@ -66,15 +68,15 @@ function arrangeCommonSubjectSessions() {
  * @returns {void}
  */
 function arrangeProfessionsSession() {
-    const [headers, ...data] = filteredSheet.getDataRange().getValues();
-    const session_column = headers.indexOf("節次");
+    const [filteredHeaders, ...filteredData] = filteredSheet
+        .getDataRange()
+        .getValues();
+    const session_column = filteredHeaders.indexOf("節次");
 
     const MAX_SESSION_NUMBER = parseInt(configs["節數上限"]);
     const MAX_SESSION_STUDENTS = 0.9 * parseInt(configs["每間試場人數上限"]); // 每節的最大學生數的 9 成
 
-    const dgs = Object.entries(getDepartmentGradeSubjectCounts()).sort(
-        descending_sorting
-    );
+    const dgs = getDepartmentGradeSubjectPopulation();
     const sessions = get_session_statistics();
 
     for (let i = 1; i < MAX_SESSION_NUMBER + 2; i++) {
@@ -100,7 +102,7 @@ function arrangeProfessionsSession() {
             }
 
             if (!has_duplicate && has_quota) {
-                data.forEach(function (row) {
+                filteredData.forEach(function (row) {
                     let key = row[0] + row[1] + "_" + row[7];
                     if (key == dgs[k][0] && row[8] == 0) {
                         row[session_column] = i;
@@ -117,7 +119,7 @@ function arrangeProfessionsSession() {
         modified_data = modified_data.concat(sessions[i].students);
     }
 
-    if (modified_data.length == data.length) {
+    if (modified_data.length == filteredData.length) {
         setRangeValues(
             filteredSheet.getRange(
                 2,

@@ -127,7 +127,7 @@ function getDepartmentName(cls) {
  * 統計各科別年級、各班級、科目的應考人數
  * @returns {Object} 包含科別、年級、班級和科目的統計數據
  */
-function getDepartmentGradeSubjectCounts() {
+function getDepartmentGradeSubjectPopulation() {
     const [filteredHeaders, ...filteredData] = filteredSheet
         .getDataRange()
         .getValues();
@@ -147,7 +147,9 @@ function getDepartmentGradeSubjectCounts() {
         };
     };
 
-    return filteredData.reduce(updateStatistics, {});
+    return Object.entries(filteredData.reduce(updateStatistics, {})).sort(
+        descending_sorting
+    );
 }
 
 function create_classroom() {
