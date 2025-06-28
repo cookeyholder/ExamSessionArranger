@@ -80,7 +80,7 @@ function arrangeProfessionsSession() {
     const MAX_SESSION_NUMBER = parseInt(configs["節數上限"]);
     const MAX_SESSION_STUDENTS = 0.9 * parseInt(configs["每間試場人數上限"]); // 每節的最大學生數的 9 成
 
-    const dgs = Object.entries(get_department_grade_subject_statistics()).sort(
+    const dgs = Object.entries(getDepartmentGradeSubjectCounts()).sort(
         descending_sorting
     );
     const sessions = get_session_statistics();

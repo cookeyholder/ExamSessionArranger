@@ -22,9 +22,9 @@ function getConfigs() {
 }
 
 function calculateElapsedTimeInSeconds(startTime) {
-	let stopTime = new Date();
-	let newRuntime = Number(stopTime) - Number(startTime);
-	return Math.ceil(newRuntime / 1000);
+    let stopTime = new Date();
+    let newRuntime = Number(stopTime) - Number(startTime);
+    return Math.ceil(newRuntime / 1000);
 }
 
 function count_time_consume(runner) {
@@ -177,60 +177,31 @@ function descending_population(a, b) {
     }
 }
 
-function get_department_grade_statistics_of_array(data) {
-    let department_column = 0;
-    let grade_column = 1;
-    let statistics = {};
-    for (row of data) {
-        let key = row[department_column] + row[grade_column];
+/**
+ * 統計各科別年級、各班級、科目的應考人數
+ * @returns {Object} 包含科別、年級、班級和科目的統計數據
+ */
+function getDepartmentGradeSubjectCounts() {
+	const [filteredHeaders, ...filteredData] = filteredSheet
+		.getDataRange()
+		.getValues();
 
-        if (key in statistics) {
-            statistics[key] += 1;
-        } else {
-            statistics[key] = 1;
-        }
-    }
+	const departmentColumn = filteredHeaders.indexOf('科別');
+	const gradeColumn = filteredHeaders.indexOf('年級');
+	const subjectNameColumn = filteredHeaders.indexOf('科目名稱');
 
-    return statistics;
-}
+	const createStatisticsKey = row => 
+		row[departmentColumn] + row[gradeColumn] + '_' + row[subjectNameColumn];
 
-function get_department_grade_subject_statistics_of_array(data) {
-    const department_column = 0;
-    const grade_column = 1;
-    const subjectNameColumn = 7;
+	const updateStatistics = (statistics, row) => {
+		const key = createStatisticsKey(row);
+		return {
+			...statistics,
+			[key]: (statistics[key] || 0) + 1
+		};
+	};
 
-    let statistics = {};
-    for (row of data) {
-        let key =
-            row[department_column] +
-            row[grade_column] +
-            "_" +
-            row[subjectNameColumn];
-
-        if (key in statistics) {
-            statistics[key] += 1;
-        } else {
-            statistics[key] = 1;
-        }
-    }
-
-    return statistics;
-}
-
-function get_department_grade_statistics() {
-    // 統計各科別年級、各班級的應考人數
-
-    const [headers, ...data] = filteredSheet.getDataRange().getValues();
-
-    return get_department_grade_statistics_of_array(data);
-}
-
-function get_department_grade_subject_statistics() {
-    // 統計各科別年級、各班級、科目的應考人數
-
-    const [headers, ...data] = filteredSheet.getDataRange().getValues();
-
-    return get_department_grade_subject_statistics_of_array(data);
+	return filteredData.reduce(updateStatistics, {});
 }
 
 function create_classroom() {
@@ -309,6 +280,10 @@ function get_session_statistics() {
 
     for (row of data) {
         sessions[row[session_column]].students.push(row);
+    }
+
+    return sessions;
+}
     }
 
     return sessions;
