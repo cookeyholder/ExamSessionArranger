@@ -120,7 +120,7 @@ function arrangeClassroom() {
         );
     } else {
         Logger.log(
-            "現有試場數無法容納所有補考學生，請增加試場數或調整每間試場人數上限！"
+            "(arrangeClassroom) 現有試場數無法容納所有補考學生，請增加試場數或調整每間試場人數上限！"
         );
         SpreadsheetApp.getUi().alert(
             "現有試場數無法容納所有補考學生，請增加試場數或調整每間試場人數上限！"

@@ -166,9 +166,15 @@ const processSessionScheduling = (
 
     for (const dgItem of dgs) {
         if (session.population >= maxStudents) {
-            Logger.log(`第${sessionIndex}節已達人數上限。`);
-            Logger.log(`學生數為： ${session.population}`);
-            Logger.log(`每節的最大學生數為： ${maxStudents}`);
+            Logger.log(
+                `(processSessionScheduling) 第${sessionIndex}節已達人數上限。`
+            );
+            Logger.log(
+                `(processSessionScheduling) 學生數為： ${session.population}`
+            );
+            Logger.log(
+                `(processSessionScheduling) 每節的最大學生數為： ${maxStudents}`
+            );
             break;
         }
 
@@ -196,7 +202,7 @@ const collectAllSessionStudents = (sessions, maxSessionNumber) => {
     return Array.from({ length: maxSessionNumber + 1 }, (_, i) => i + 1).reduce(
         (acc, sessionIndex) => {
             Logger.log(
-                `第${sessionIndex}節(sessions[${sessionIndex}]): ${sessions[sessionIndex].population}位學生。`
+                `(collectAllSessionStudents) 第${sessionIndex}節(sessions[${sessionIndex}]): ${sessions[sessionIndex].population}位學生。`
             );
             return acc.concat(sessions[sessionIndex].students);
         },

@@ -41,20 +41,11 @@ function setRangeValues(range, data) {
         return true;
     } else {
         Logger.log("(setRangeValues) 欲寫入的範圍大小和 data 的大小不一致！");
-        // 顯示 range 的大小
         Logger.log(
-            "(setRangeValues) 欲寫入的範圍大小: " +
-                range.getNumRows() +
-                "列 x " +
-                range.getNumColumns() +
-                "行"
+            `(setRangeValues) 欲寫入的範圍大小: ${range.getNumRows()}列 x ${range.getNumColumns()}行`
         );
         Logger.log(
-            "(setRangeValues) 欲寫入的 data 大小: " +
-                data.length +
-                "列 x " +
-                data[0].length +
-                "行"
+            `(setRangeValues) 欲寫入的 data 大小: ${data.length}列 x ${data[0].length}行`
         );
         SpreadsheetApp.getUi().alert("欲寫入的範圍大小和 data 的大小不一致！");
         return false;

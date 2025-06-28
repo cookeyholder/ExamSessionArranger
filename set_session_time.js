@@ -29,7 +29,7 @@ function set_session_time() {
             modified_data
         );
     } else {
-        Logger.log("寫入節次時間失敗！");
+        Logger.log("(set_session_time) 寫入節次時間失敗！");
         SpreadsheetApp.getUi().alert("寫入節次時間失敗！");
     }
 }
