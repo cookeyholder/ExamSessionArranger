@@ -4,7 +4,7 @@ const prearrangedSheet = ss.getSheetByName("預先編排的科目及節次");
 const unfilteredSheet = ss.getSheetByName("註冊組達補考標準名單");
 const candidateSheet = ss.getSheetByName("教學組排入考程的科目");
 const openSheet = ss.getSheetByName("開課資料(查詢任課教師用)");
-const filteredSheet = ss.getSheetByName("排入考程的補考名單");
+const filteredSheet = ss.getSheetByName("補考名單");
 const smallBagSheet = ss.getSheetByName("小袋封面套印用資料");
 const bigBagSheet = ss.getSheetByName("大袋封面套印用資料");
 const bulletinSheet = ss.getSheetByName("公告版補考場次");
@@ -35,7 +35,7 @@ function onOpen() {
         .addSeparator()
         .addItem("1-1. 清空", "initialize")
         .addItem("1-2. 開始篩選", "getFilteredData")
-        .addItem("1-3. 安排共同科節次", "arrange_commons_session")
+        .addItem("1-3. 安排共同科節次", "arrangeCommonSubjectSessions")
         .addItem("1-4. 安排專業科節次", "arrangeProfessionsSession")
         .addItem("1-5. 安排試場", "arrangeClassroom")
         .addItem("1-6. 計算大、小袋編號", "bag_numbering")
@@ -121,7 +121,7 @@ function generateCompleteExamArrangement() {
     const startTime = new Date();
 
     getFilteredData(); // 篩選出列入考程的科目
-    arrange_commons_session(); // 安排物理、國、英、數、資訊科技、史地的節次
+    arrangeCommonSubjectSessions(); // 安排物理、國、英、數、資訊科技、史地的節次
     arrangeProfessionsSession(); // 安排專業科目的節次
     arrangeClassroom(); // 安排試場的班級科目
     sort_by_session_classroom();

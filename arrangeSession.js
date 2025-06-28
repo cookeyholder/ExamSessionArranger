@@ -1,37 +1,60 @@
-function arrange_commons_session() {
-    const [param_headers, ...commonData] = parametersSheet
-        .getRange(2, 5, 21, 2)
-        .getValues();
+/**
+ * 取得共同科目要安排的節次資料
+ * @returns {Object} 共同科目要安排的節次資料
+ */
+function getCommonSubjectSessions() {
+    const commonSessions = prearrangedSheet
+        .getRange(3, 1, 20, 2)
+        .getValues()
+        .reduce(function (acc, row) {
+            if (row[0] && row[1]) {
+                acc[row[0]] = row[1];
+            }
+            return acc;
+        }, {});
+
+    Logger.log(
+        "(getCommonSubjectSessions) 共同(預排)科目要安排的節次資料: " +
+            JSON.stringify(commonSessions)
+    );
+
+    return commonSessions;
+}
+
+/**
+ * 安排共同科目的節次
+ * @returns {void}
+ */
+function arrangeCommonSubjectSessions() {
+    const commonSessions = getCommonSubjectSessions();
+
     const [headers, ...data] = filteredSheet.getDataRange().getValues();
-    const subject_column = headers.indexOf("科目名稱");
-    const session_column = headers.indexOf("節次");
+    const subjectNameColumn = headers.indexOf("科目名稱");
+    const sessionColumn = headers.indexOf("節次");
 
-    let commonSessions = {};
-    commonData.forEach(function (row) {
-        commonSessions[row[0]] = row[1];
-    });
-
-    let modified_data = data.map(function (row) {
-        if (commonSessions[row[subject_column]] == null) {
+    const modifiedData = data.map(function (row) {
+        if (commonSessions[row[subjectNameColumn]] == null) {
             return row;
         } else {
-            row[session_column] = commonSessions[row[subject_column]];
+            row[sessionColumn] = commonSessions[row[subjectNameColumn]];
             return row;
         }
     });
 
-    if (modified_data.length == data.length) {
+    if (modifiedData.length === data.length) {
         setRangeValues(
             filteredSheet.getRange(
                 2,
                 1,
-                modified_data.length,
-                modified_data[0].length
+                modifiedData.length,
+                modifiedData[0].length
             ),
-            modified_data
+            modifiedData
         );
     } else {
-        Logger.log("安排共同科目節次時，合併後的資料筆數和原有的筆數不同！");
+        Logger.log(
+            "(arrangeCommonSubjectSessions)安排共同科目節次時，合併後的資料筆數和原有的筆數不同！"
+        );
         SpreadsheetApp.getUi().alert(
             "安排共同科目節次時，合併後的資料筆數和原有的筆數不同！"
         );
@@ -46,14 +69,16 @@ function descending_sorting(a, b) {
     }
 }
 
+/**
+ * 安排專業科目(非共同科目)的節次
+ * @returns {void}
+ */
 function arrangeProfessionsSession() {
-    // 安排非共同科目的節次
     const [headers, ...data] = filteredSheet.getDataRange().getValues();
     const session_column = headers.indexOf("節次");
 
-    const MAX_SESSION_NUMBER = parametersSheet.getRange("B5").getValue();
-    const MAX_SESSION_STUDENTS =
-        0.9 * parametersSheet.getRange("B9").getValue(); // 每節的最大學生數的 9 成
+    const MAX_SESSION_NUMBER = parseInt(configs["節數上限"]);
+    const MAX_SESSION_STUDENTS = 0.9 * parseInt(configs["每間試場人數上限"]); // 每節的最大學生數的 9 成
 
     const dgs = Object.entries(get_department_grade_subject_statistics()).sort(
         descending_sorting
