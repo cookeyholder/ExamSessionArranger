@@ -27,14 +27,6 @@ function calculateElapsedTimeInSeconds(startTime) {
     return Math.ceil(newRuntime / 1000);
 }
 
-function count_time_consume(runner) {
-    let start_time = new Date();
-    runner();
-    let end_time = new Date();
-    let runtime = Math.ceil(Number(end_time) - Number(start_time)) / 1000;
-    return runtime;
-}
-
 /** * 設定指定範圍的值。
  * 如果範圍的行數與數據的行數不匹配，則會顯示一個警告對話框。
  * @param {Range} range - 要設置值的範圍。
@@ -129,52 +121,6 @@ function getDepartmentName(cls) {
     };
 
     return departments[cls.slice(0, 2)];
-}
-
-function checkShowedBoxes() {
-    const data_range = ss
-        .getSheetByName("教學組排入考程的科目")
-        .getRange("A2:A");
-    const data_values = data_range.getValues();
-    const num_rows = data_range.getNumRows();
-    const num_cols = data_range.getNumColumns();
-
-    for (let i = 0; i < num_rows; i++) {
-        if (!ss.isRowHiddenByFilter(i + 1)) {
-            for (let j = 0; j < num_cols; j++) {
-                data_values[i][j] = true;
-            }
-        }
-    }
-
-    setRangeValues(data_range, data_values);
-}
-
-function cancelCheckboxes() {
-    const data_range = ss
-        .getSheetByName("教學組排入考程的科目")
-        .getRange("A1:A");
-    const data_values = data_range.getValues();
-    const num_rows = data_range.getNumRows();
-    const num_cols = data_range.getNumColumns();
-
-    for (let i = 0; i < num_rows; i++) {
-        if (!ss.isRowHiddenByFilter(i + 1)) {
-            for (let j = 0; j < num_cols; j++) {
-                data_values[i][j] = false;
-            }
-        }
-    }
-
-    setRangeValues(data_range, data_values);
-}
-
-function descending_population(a, b) {
-    if (a[1] === b[1]) {
-        return 0;
-    } else {
-        return a[1] < b[1] ? 1 : -1;
-    }
 }
 
 /**
