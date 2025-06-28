@@ -24,7 +24,7 @@ function arrangeClassroom() {
     const MAX_CLASSROOM_STUDENTS = parametersSheet.getRange("B7").getValue();
     const MAX_SUBJECT_NUMBER = parametersSheet.getRange("B8").getValue();
 
-    const sessions = get_session_statistics();
+    const sessions = getSessionStatistics();
 
     for (let i = 1; i < MAX_SESSION_NUMBER + 2; i++) {
         let students_sum = 0; // 用來加總同節次的所有試場人數

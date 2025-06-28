@@ -152,83 +152,88 @@ function getDepartmentGradeSubjectPopulation() {
     );
 }
 
-function create_classroom() {
-    return {
-        students: [],
-        get population() {
-            return this.students.length;
-        },
-        get class_subject_statisics() {
-            let statistics = {};
-            this.students.forEach(function (row) {
-                let key = row[3] + "_" + row[7]; // 班級 + _ + 科目
-                if (Object.keys(statistics).includes(key)) {
-                    statistics[key] += 1;
-                } else {
-                    statistics[key] = 1;
-                }
-            });
-            return statistics;
-        },
-    };
-}
+/**
+ * 建立教室物件的工廠函數
+ * @param {Array} students - 學生資料陣列
+ * @returns {Object} 教室物件
+ */
+const createClassroom = (students = []) => ({
+    students,
+    get population() {
+        return this.students.length;
+    },
+    get classSubjectStatistics() {
+        return this.students.reduce((statistics, row) => {
+            const key = row[3] + "_" + row[7]; // 班級 + _ + 科目
+            return {
+                ...statistics,
+                [key]: (statistics[key] || 0) + 1,
+            };
+        }, {});
+    },
+});
 
-function create_session() {
-    // session 物件工廠，用來產生下面的 get_session_statistic 函數中，需要建立 9 個 session 物件
-    const MAX_CLASSROOM_NUMBER = parseInt(configs["試場數量"]);
-    const session = {
-        classrooms: [],
-        students: [],
-        get population() {
-            return this.students.length;
-        },
+/**
+ * 建立節次物件的工廠函數
+ * @param {Array} students - 學生資料陣列
+ * @param {number} maxClassroomNumber - 最大試場數量
+ * @returns {Object} 節次物件
+ */
+const createSession = (students = [], maxClassroomNumber) => ({
+    classrooms: Array.from({ length: maxClassroomNumber + 1 }, () =>
+        createClassroom()
+    ),
+    students,
+    get population() {
+        return this.students.length;
+    },
+    get departmentGradeStatistics() {
+        return this.students.reduce((statistics, row) => {
+            const key = row[0] + row[1]; // 科別 + 年級
+            return {
+                ...statistics,
+                [key]: (statistics[key] || 0) + 1,
+            };
+        }, {});
+    },
+    get departmentClassSubjectStatistics() {
+        return this.students.reduce((statistics, row) => {
+            const key = row[3] + row[7]; // 班級 + 科目
+            return {
+                ...statistics,
+                [key]: (statistics[key] || 0) + 1,
+            };
+        }, {});
+    },
+});
 
-        get department_grade_statisics() {
-            let statistics = {};
-            this.students.forEach(function (row) {
-                let key = row[0] + row[1]; // 科別 + 年級
-                if (Object.keys(statistics).includes(key)) {
-                    statistics[key] += 1;
-                } else {
-                    statistics[key] = 1;
-                }
-            });
-            return statistics;
-        },
-
-        get department_class_subject_statisics() {
-            let statistics = {};
-            this.students.forEach(function (row) {
-                let key = row[3] + row[7]; // 班級 + 科目
-                if (Object.keys(statistics).includes(key)) {
-                    statistics[key] += 1;
-                } else {
-                    statistics[key] = 1;
-                }
-            });
-            return statistics;
-        },
-    };
-
-    for (let j = 0; j < MAX_CLASSROOM_NUMBER + 1; j++) {
-        session.classrooms.push(create_classroom());
-    }
-    return session;
-}
-
-function get_session_statistics() {
+/**
+ * 取得節次統計資料
+ * @returns {Array} 包含所有節次統計資料的陣列
+ */
+function getSessionStatistics() {
     const [headers, ...data] = filteredSheet.getDataRange().getValues();
-    const session_column = headers.indexOf("節次");
+    const sessionColumn = headers.indexOf("節次");
     const MAX_SESSION_NUMBER = parseInt(configs["節數上限"]);
+    const MAX_CLASSROOM_NUMBER = parseInt(configs["試場數量"]);
 
-    const sessions = [];
-    for (let i = 0; i < MAX_SESSION_NUMBER + 2; i++) {
-        sessions.push(create_session());
-    }
+    // 建立空的節次陣列
+    const sessions = Array.from({ length: MAX_SESSION_NUMBER + 2 }, () =>
+        createSession([], MAX_CLASSROOM_NUMBER)
+    );
 
-    for (row of data) {
-        sessions[row[session_column]].students.push(row);
-    }
+    // 將學生資料按節次分組
+    const studentsBySession = data.reduce((acc, row) => {
+        const sessionIndex = row[sessionColumn];
+        if (!acc[sessionIndex]) {
+            acc[sessionIndex] = [];
+        }
+        acc[sessionIndex].push(row);
+        return acc;
+    }, {});
 
-    return sessions;
+    // 為每個節次建立包含學生資料的節次物件
+    return sessions.map((_, index) =>
+        createSession(studentsBySession[index] || [], MAX_CLASSROOM_NUMBER)
+    );
 }
