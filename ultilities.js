@@ -182,26 +182,26 @@ function descending_population(a, b) {
  * @returns {Object} 包含科別、年級、班級和科目的統計數據
  */
 function getDepartmentGradeSubjectCounts() {
-	const [filteredHeaders, ...filteredData] = filteredSheet
-		.getDataRange()
-		.getValues();
+    const [filteredHeaders, ...filteredData] = filteredSheet
+        .getDataRange()
+        .getValues();
 
-	const departmentColumn = filteredHeaders.indexOf('科別');
-	const gradeColumn = filteredHeaders.indexOf('年級');
-	const subjectNameColumn = filteredHeaders.indexOf('科目名稱');
+    const departmentColumn = filteredHeaders.indexOf("科別");
+    const gradeColumn = filteredHeaders.indexOf("年級");
+    const subjectNameColumn = filteredHeaders.indexOf("科目名稱");
 
-	const createStatisticsKey = row => 
-		row[departmentColumn] + row[gradeColumn] + '_' + row[subjectNameColumn];
+    const createStatisticsKey = (row) =>
+        row[departmentColumn] + row[gradeColumn] + "_" + row[subjectNameColumn];
 
-	const updateStatistics = (statistics, row) => {
-		const key = createStatisticsKey(row);
-		return {
-			...statistics,
-			[key]: (statistics[key] || 0) + 1
-		};
-	};
+    const updateStatistics = (statistics, row) => {
+        const key = createStatisticsKey(row);
+        return {
+            ...statistics,
+            [key]: (statistics[key] || 0) + 1,
+        };
+    };
 
-	return filteredData.reduce(updateStatistics, {});
+    return filteredData.reduce(updateStatistics, {});
 }
 
 function create_classroom() {
@@ -271,7 +271,7 @@ function create_session() {
 function get_session_statistics() {
     const [headers, ...data] = filteredSheet.getDataRange().getValues();
     const session_column = headers.indexOf("節次");
-    const MAX_SESSION_NUMBER = parserseInt(configs["節數上限"]);
+    const MAX_SESSION_NUMBER = parseInt(configs["節數上限"]);
 
     const sessions = [];
     for (let i = 0; i < MAX_SESSION_NUMBER + 2; i++) {
@@ -280,10 +280,6 @@ function get_session_statistics() {
 
     for (row of data) {
         sessions[row[session_column]].students.push(row);
-    }
-
-    return sessions;
-}
     }
 
     return sessions;
