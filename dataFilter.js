@@ -1,7 +1,4 @@
 function getFilteredData() {
-    // 清除「排入考程的補考名單」工作表的內容
-    initialize();
-
     // 取得「註冊組補考名單」的欄位索引
     const [unfilteredSheetHeaders, ...unfilteredData] = unfilteredSheet
         .getDataRange()
@@ -41,6 +38,19 @@ function getFilteredData() {
                 isManualGraded: row[isManualGradedColumn],
             };
         }
+    }
+    Logger.log(
+        "(getFilteredData) 要補考的科目：%s",
+        JSON.stringify(candidateSubjects)
+    );
+    if (Object.keys(candidateSubjects).length === 0) {
+        Logger.log(
+            "(getFilteredData) 沒有找到任何需要補考的科目。請檢查「教學組排入考程的科目」工作表是否正確。"
+        );
+        SpreadsheetApp.getUi().alert(
+            "沒有找到任何需要補考的科目。請檢查「教學組排入考程的科目」工作表是否正確。"
+        );
+        return;
     }
 
     // 建立班級科目與任課教師的對應表
