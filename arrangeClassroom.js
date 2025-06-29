@@ -19,10 +19,10 @@ function arrangeClassroom() {
     const subject_column = headers.indexOf("科目名稱");
     const classroom_column = headers.indexOf("試場");
 
-    const MAX_SESSION_NUMBER = parametersSheet.getRange("B5").getValue();
-    const MAX_CLASSROOM_NUMBER = parametersSheet.getRange("B6").getValue();
-    const MAX_CLASSROOM_STUDENTS = parametersSheet.getRange("B7").getValue();
-    const MAX_SUBJECT_NUMBER = parametersSheet.getRange("B8").getValue();
+    const MAX_SESSION_NUMBER = parseInt(configs["節數上限"]);
+    const MAX_CLASSROOM_NUMBER = parseInt(configs["試場數量"]);
+    const MAX_STUDENTS_PER_CLASSROOM = parseInt(configs["每間試場人數上限"]);
+    const MAX_SUBJECTS_PER_CLASSROOM = parseInt(configs["試場容納科目上限"]);
 
     const sessions = getSessionStatistics();
 
@@ -43,7 +43,7 @@ function arrangeClassroom() {
                 // 檢查此試場是否還有名額
                 const has_quota =
                     dgs[k][1] + sessions[i].classrooms[j].population <=
-                    MAX_CLASSROOM_STUDENTS;
+                    MAX_STUDENTS_PER_CLASSROOM;
                 if (!has_quota) {
                     continue;
                 }
@@ -54,14 +54,14 @@ function arrangeClassroom() {
                         Object.keys(
                             sessions[i].classrooms[j].class_subject_statisics
                         ).length <=
-                    MAX_SUBJECT_NUMBER;
+                    MAX_SUBJECTS_PER_CLASSROOM;
                 if (!under_subject_limitation) {
                     continue;
                 }
 
                 if (
                     sessions[i].classrooms[j].population >=
-                    MAX_CLASSROOM_STUDENTS
+                    MAX_STUDENTS_PER_CLASSROOM
                 ) {
                     break;
                 }
