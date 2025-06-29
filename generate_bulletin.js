@@ -52,7 +52,7 @@ function generate_bulletin() {
         ),
         modified_data
     );
-    sort_by_session_classroom();
+    sortBySessionThenClassroom();
     prettier();
 }
 

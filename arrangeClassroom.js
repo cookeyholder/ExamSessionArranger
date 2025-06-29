@@ -134,5 +134,5 @@ function arrangeClassroom() {
     }
 
     filteredSheet.getRange("I:J").setNumberFormat("#,##0");
-    sort_by_session_classroom();
+    sortBySessionThenClassroom();
 }

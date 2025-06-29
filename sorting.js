@@ -23,7 +23,7 @@ function sort_by_classname() {
     ]);
 }
 
-function sort_by_session_classroom() {
+function sortBySessionThenClassroom() {
     const filtered = filteredSheet.getDataRange();
 
     filtered.offset(1, 0, filtered.getNumRows() - 1).sort([

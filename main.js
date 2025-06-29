@@ -31,7 +31,7 @@ function onOpen() {
         .addSeparator()
         .addItem("依「科目」排序補考名單", "sort_by_subject")
         .addItem("依「班級座號」排序補考名單", "sort_by_classname")
-        .addItem("依「節次試場」排序補考名單", "sort_by_session_classroom")
+        .addItem("依「節次試場」排序補考名單", "sortBySessionThenClassroom")
         .addSeparator()
         .addItem("1-1. 清空", "initialize")
         .addItem("1-2. 開始篩選", "getFilteredData")
@@ -124,7 +124,7 @@ function generateCompleteExamArrangement() {
     arrangeCommonSubjectSessions(); // 安排物理、國、英、數、資訊科技、史地的節次
     arrangeProfessionsSession(); // 安排專業科目的節次
     arrangeClassroom(); // 安排試場的班級科目
-    sort_by_session_classroom();
+    sortBySessionThenClassroom();
     bag_numbering();
     set_session_time();
     calculate_classroom_population();

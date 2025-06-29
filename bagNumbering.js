@@ -1,5 +1,5 @@
 function bag_numbering() {
-    sort_by_session_classroom();
+    sortBySessionThenClassroom();
 
     const [headers, ...data] = filteredSheet.getDataRange().getValues();
     const classNameColumn = headers.indexOf("班級");

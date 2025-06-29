@@ -1,5 +1,5 @@
 function generate_sessionRecordSheet() {
-    sort_by_session_classroom();
+    sortBySessionThenClassroom();
 
     const [headers, ...data] = filteredSheet.getDataRange().getValues();
 
