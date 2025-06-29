@@ -5,7 +5,7 @@
  * @returns {number} - 返回比較結果，負數表示 a 在 b 前，
  *                     正數表示 b 在 a 前，0 表示相等。
  */
-function descending_sorting(a, b) {
+function compareBySecondElementDesc(a, b) {
     if (a[1] === b[1]) {
         return 0;
     } else {
@@ -30,7 +30,7 @@ function arrangeClassroom() {
         let students_sum = 0; // 用來加總同節次的所有試場人數
         const dgs = Object.entries(
             sessions[i].department_class_subject_statisics
-        ).sort(descending_sorting);
+        ).sort(compareBySecondElementDesc);
         for (let j = 1; j < sessions[i].classrooms.length; j++) {
             let arranged_subjects = [];
             for (let k = 0; k < dgs.length; k++) {

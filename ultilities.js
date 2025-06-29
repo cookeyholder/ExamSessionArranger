@@ -139,7 +139,7 @@ function getDepartmentGradeSubjectPopulation() {
     };
 
     return Object.entries(filteredData.reduce(updateStatistics, {})).sort(
-        descending_sorting
+        compareBySecondElementDesc
     );
 }
 
