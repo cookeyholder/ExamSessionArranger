@@ -48,41 +48,73 @@ function onOpen() {
 }
 
 /**
- * 將工作表「排入考程的補考名單」初始化成只剩第一列的欄位標題
- * (1) 清除所有儲存格內容
- * (2) 刪除多餘的列到只剩5列
- * (3) 填入欄位標題
+ * 刪除工作表多餘的列，只保留指定數量的列
+ * @param {Sheet} sheet - 工作表物件
+ * @param {number} keepRows - 要保留的列數
+ * @returns {Sheet} 處理後的工作表
+ */
+const deleteExcessRows = (sheet, keepRows) => {
+    const maxRows = sheet.getMaxRows();
+    if (maxRows > keepRows) {
+        sheet.deleteRows(keepRows + 1, maxRows - keepRows);
+    }
+    return sheet;
+};
+
+/**
+ * 設置工作表範圍為純文字格式
+ * @param {Sheet} sheet - 工作表物件
+ * @param {number} rows - 列數
+ * @param {number} columns - 欄數
+ * @returns {Sheet} 處理後的工作表
+ */
+const setTextFormat = (sheet, rows, columns) => {
+    sheet.getRange(1, 1, rows, columns).setNumberFormat("@STRING@");
+    return sheet;
+};
+
+/**
+ * 初始化單一工作表
+ * @param {Sheet} sheet - 工作表物件
+ * @param {number} columns - 欄數
+ * @param {number} keepRows - 要保留的列數
+ * @returns {Sheet} 處理後的工作表
+ */
+const initializeSheet = (sheet, columns, keepRows = 5) => {
+    return [sheet]
+        .map((s) => {
+            s.clear();
+            return s;
+        })
+        .map((s) => deleteExcessRows(s, keepRows))
+        .map((s) => setTextFormat(s, keepRows, columns))[0];
+};
+
+/**
+ * 取得工作表設定對應表
+ * @returns {Array} 工作表設定陣列 [sheet, columns]
+ */
+const getSheetConfigurations = () => [
+    [filteredSheet, 19],
+    [bulletinSheet, 6],
+    [sessionRecordSheet, 12],
+    [smallBagSheet, 12],
+    [bigBagSheet, 10],
+];
+
+/**
+ * 批次初始化所有工作表
+ * @param {Array} sheetConfigs - 工作表設定陣列
+ * @returns {Array} 初始化後的工作表陣列
+ */
+const initializeAllSheets = (sheetConfigs) =>
+    sheetConfigs.map(([sheet, columns]) => initializeSheet(sheet, columns));
+
+/**
+ * 設置補考名單標題列
  * @returns {void}
  */
-function initialize() {
-    // 清除所有值
-    filteredSheet.clear();
-    bulletinSheet.clear();
-    sessionRecordSheet.clear();
-    smallBagSheet.clear();
-    bigBagSheet.clear();
-    Logger.log(
-        "(initialize) 清除「排入考程的補考名單」、「公告版」、「試場紀錄表」、「大小袋封面」工作表的內容"
-    );
-
-    // 將格式設置為純文字格式
-    filteredSheet.getRange(1, 1, 1000, 19).setNumberFormat("@STRING@");
-    bulletinSheet.getRange(1, 1, 1000, 6).setNumberFormat("@STRING@");
-    sessionRecordSheet.getRange(1, 1, 1000, 12).setNumberFormat("@STRING@");
-    smallBagSheet.getRange(1, 1, 1000, 12).setNumberFormat("@STRING@");
-    bigBagSheet.getRange(1, 1, 1000, 10).setNumberFormat("@STRING@");
-    Logger.log(
-        "(initialize) 將「排入考程的補考名單」、「公告版」、「試場紀錄表」、「大小袋封面」工作表的格式設置為純文字格式"
-    );
-
-    // 將課程代碼補完，包括：「註冊組匯出的補考名單」、「開課資料(查詢任課教師用)」
-    completeUnfilteredSheetCode();
-    completeOpenSheetCode();
-    Logger.log(
-        "(initialize) 補完「註冊組補考名單」、「開課資料(查詢任課教師用)」工作表的課程代碼。"
-    );
-
-    // 「排入考程的補考名單」工作表設置標題列
+const setupFilteredSheetHeaders = () => {
     const headers = [
         "科別",
         "年級",
@@ -105,12 +137,53 @@ function initialize() {
         "任課老師",
     ];
     filteredSheet.appendRow(headers);
+};
 
-    // 移除已有篩選器，重新設置新的篩選器
+/**
+ * 設置篩選器
+ * @returns {void}
+ */
+const setupFilter = () => {
     if (filteredSheet.getDataRange().getFilter()) {
         filteredSheet.getDataRange().getFilter().remove();
     }
     filteredSheet.getDataRange().createFilter();
+};
+
+/**
+ * 執行課程代碼補完
+ * @returns {void}
+ */
+const completeCourseCodes = () => {
+    completeUnfilteredSheetCode();
+    completeOpenSheetCode();
+};
+
+/**
+ * 將工作表「排入考程的補考名單」初始化成只剩第一列的欄位標題
+ * (1) 清除所有儲存格內容
+ * (2) 刪除多餘的列到只剩5列
+ * (3) 填入欄位標題
+ * @returns {void}
+ */
+function initialize() {
+    // 批次初始化所有工作表
+    const sheetConfigs = getSheetConfigurations();
+    initializeAllSheets(sheetConfigs);
+
+    Logger.log(
+        "(initialize) 清除「排入考程的補考名單」、「公告版」、「試場紀錄表」、「大小袋封面」工作表的內容，刪減列數至5列，並設置為純文字格式"
+    );
+
+    // 補完課程代碼
+    completeCourseCodes();
+    Logger.log(
+        "(initialize) 補完「註冊組補考名單」、「開課資料(查詢任課教師用)」工作表的課程代碼。"
+    );
+
+    // 設置補考名單標題和篩選器
+    setupFilteredSheetHeaders();
+    setupFilter();
 }
 
 /**
