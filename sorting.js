@@ -1,4 +1,4 @@
-function sort_by_subject() {
+function sortBySubject() {
     const filtered = filteredSheet.getDataRange();
 
     filtered.offset(1, 0, filtered.getNumRows() - 1).sort([
