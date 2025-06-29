@@ -224,7 +224,7 @@ function arrangeProfessionsSession() {
     const NUMBER_OF_CLASSROOMS = parseInt(configs["試場數量"]);
     const MAX_STUDENTS_PER_CLASSROOM = parseInt(configs["每間試場人數上限"]);
     const MAX_STUDENTS_PER_SESSION =
-        0.9 * NUMBER_OF_CLASSROOMS * MAX_STUDENTS_PER_CLASSROOM; // 每節的最大學生數的 9 成
+        NUMBER_OF_CLASSROOMS * MAX_STUDENTS_PER_CLASSROOM;
 
     const dgs = getDepartmentGradeSubjectPopulation();
     const sessions = getSessionStatistics();
