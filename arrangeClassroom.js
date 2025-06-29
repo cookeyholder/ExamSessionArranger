@@ -13,6 +13,54 @@ function compareBySecondElementDesc(a, b) {
     }
 }
 
+/**
+ * 檢查科別年級是否已存在於節次中
+ * @param {Object} classroom - 試場物件
+ * @param {string} departmentGrade - 科別年級組合
+ * @returns {boolean} 是否有重複
+ */
+const hasDepartmentGradeDuplicate = (classroom, classSubject) => {
+    const stats = classroom.classSubjectStatistics || {};
+    return Object.keys(stats).includes(classSubject);
+};
+
+/**
+ * 檢查該節是否有足夠名額
+ * @param {Object} classroom - 試場物件
+ * @param {number} additionalStudents - 要加入的學生數
+ * @param {number} maxStudentsPerClassroom - 每間試場最大學生數
+ * @returns {boolean} 是否有足夠名額
+ */
+const hasClassroomQuota = (
+    classroom,
+    additionalStudents,
+    maxStudentsPerClassroom
+) => {
+    return additionalStudents + classroom.population <= maxStudentsPerClassroom;
+};
+
+/**
+ * 檢查科別年級科目組合是否可安排到指定節次
+ * @param {Object} classroom - 試場物件
+ * @param {Array} dgsItem - 科別年級科目資料 [key, count]
+ * @param {number} maxStudentsPerClassroom - 每間試場最大學生數
+ * @returns {boolean} 是否可安排
+ */
+const canScheduleToClassroom = (
+    classroom,
+    dcsItem,
+    maxStudentsPerClassroom
+) => {
+    const classSubject = dcsItem[0];
+    const studentCount = dcsItem[1];
+
+    return (
+        !hasDepartmentGradeDuplicate(classroom, classSubject) &&
+        hasClassroomQuota(classroom, studentCount, maxStudentsPerClassroom) &&
+        classroom.population < maxStudentsPerClassroom
+    );
+};
+
 function arrangeClassroom() {
     const [headers, ...data] = filteredSheet.getDataRange().getValues();
     const classNameColumn = headers.indexOf("班級");
@@ -24,7 +72,15 @@ function arrangeClassroom() {
     const MAX_STUDENTS_PER_CLASSROOM = parseInt(configs["每間試場人數上限"]);
     const MAX_SUBJECTS_PER_CLASSROOM = parseInt(configs["試場容納科目上限"]);
 
+    const dgs = getDepartmentGradeSubjectPopulation();
     const sessions = getSessionStatistics();
+
+    Logger.log(`(arrangeClassroom) sessions: 有 ${sessions.length} 節`);
+    Logger.log(
+        `(arrangeClassroom) sessions["students"]: ${JSON.stringify(
+            sessions.students
+        )}`
+    );
 
     for (let i = 1; i < MAX_SESSION_NUMBER + 2; i++) {
         let students_sum = 0; // 用來加總同節次的所有試場人數

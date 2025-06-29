@@ -188,13 +188,15 @@ const createSession = (students = [], maxClassroomNumber) => ({
         }, {});
     },
     get departmentClassSubjectStatistics() {
-        return this.students.reduce((statistics, row) => {
-            const key = row[3] + row[7]; // 班級 + 科目
-            return {
-                ...statistics,
-                [key]: (statistics[key] || 0) + 1,
-            };
-        }, {});
+        return Object.entries(
+            this.students.reduce((statistics, row) => {
+                const key = row[3] + row[7]; // 班級 + 科目
+                return {
+                    ...statistics,
+                    [key]: (statistics[key] || 0) + 1,
+                };
+            }, {})
+        ).sort(compareBySecondElementDesc);
     },
 });
 

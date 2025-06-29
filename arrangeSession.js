@@ -238,10 +238,9 @@ function arrangeProfessionsSession() {
     const sessions = getSessionStatistics();
 
     // 處理所有節次的學生安排
-    let updatedData = filteredData;
     for (let i = 1; i <= MAX_SESSION_NUMBER + 1; i++) {
-        updatedData = processSessionScheduling(
-            updatedData,
+        let updatedData = processSessionScheduling(
+            filteredData,
             sessions,
             dgs,
             i,
