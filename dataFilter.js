@@ -39,10 +39,7 @@ function getFilteredData() {
             };
         }
     }
-    Logger.log(
-        "(getFilteredData) 要補考的科目：%s",
-        JSON.stringify(candidateSubjects)
-    );
+
     if (Object.keys(candidateSubjects).length === 0) {
         Logger.log(
             "(getFilteredData) 沒有找到任何需要補考的科目。請檢查「教學組排入考程的科目」工作表是否正確。"

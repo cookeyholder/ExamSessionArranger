@@ -201,10 +201,18 @@ const processSessionScheduling = (
 const collectAllSessionStudents = (sessions, maxSessionNumber) => {
     return Array.from({ length: maxSessionNumber + 1 }, (_, i) => i + 1).reduce(
         (acc, sessionIndex) => {
-            Logger.log(
-                `(collectAllSessionStudents) 第${sessionIndex}節(sessions[${sessionIndex}]): ${sessions[sessionIndex].population}位學生。`
-            );
-            return acc.concat(sessions[sessionIndex].students);
+            const session = sessions[sessionIndex];
+            if (session) {
+                Logger.log(
+                    `(collectAllSessionStudents) 第${sessionIndex}節應考學生數: ${session.population}位。`
+                );
+                return acc.concat(session.students);
+            } else {
+                Logger.log(
+                    `(collectAllSessionStudents) 第${sessionIndex}節沒有學生資料。`
+                );
+                return acc;
+            }
         },
         []
     );
@@ -231,7 +239,7 @@ function arrangeProfessionsSession() {
 
     // 處理所有節次的學生安排
     let updatedData = filteredData;
-    for (let i = 1; i < MAX_SESSION_NUMBER + 2; i++) {
+    for (let i = 1; i <= MAX_SESSION_NUMBER + 1; i++) {
         updatedData = processSessionScheduling(
             updatedData,
             sessions,
@@ -248,6 +256,13 @@ function arrangeProfessionsSession() {
         MAX_SESSION_NUMBER
     );
 
+    Logger.log(
+        `(arrangeProfessionsSession) 原始資料筆數：${filteredData.length} `
+    );
+    Logger.log(
+        `(arrangeProfessionsSession) 安排好的專業科目節次資料筆數：${modifiedData.length} `
+    );
+
     if (modifiedData.length === filteredData.length) {
         setRangeValues(
             filteredSheet.getRange(
@@ -260,12 +275,43 @@ function arrangeProfessionsSession() {
         );
     } else {
         Logger.log(
-            `(arrangeProfessionsSession) 無法將所有人排入 ${MAX_SESSION_NUMBER} 節，請檢查是否有某科年級須補考 ${parseInt(
-                MAX_SESSION_NUMBER + 1
-            )} 科以上！`
+            `(arrangeProfessionsSession) 無法將所有人排入 ${MAX_SESSION_NUMBER} 節，以下的「科別-年級」組合需補考的科目超過 ${MAX_SESSION_NUMBER} 科：${findExcessiveValuesInDgs(
+                dgs,
+                MAX_SESSION_NUMBER
+            )}`
         );
         SpreadsheetApp.getUi().alert(
-            `無法將所有人排入 ${MAX_SESSION_NUMBER} 節，請檢查是否有某科年級須補考 10 科以上！`
+            `無法將所有人排入 ${MAX_SESSION_NUMBER} 節，以下的「科別-年級」組合需補考的科目超過 ${MAX_SESSION_NUMBER} 科：${findExcessiveValuesInDgs(
+                dgs,
+                MAX_SESSION_NUMBER
+            )}`
         );
     }
+}
+
+/**
+ * 找出 dgs 中人數超過節次上限的科別年級科目組合
+ * @param {Array} dgs - 科別年級科目統計資料
+ * @param {number} maxSessionNumber - 最大節次數
+ * @returns {string} 超過上限的科別年級科目組合及其次數的描述
+ */
+function findExcessiveValuesInDgs(dgs, maxSessionNumber) {
+    const departmentGradeCounts = dgs
+        .map((dgsItem) => dgsItem[0].split("_")[0])
+        .reduce((acc, departmentGrade) => {
+            acc[departmentGrade] = (acc[departmentGrade] || 0) + 1;
+            return acc;
+        }, {});
+
+    const excessiveItems = Object.keys(departmentGradeCounts)
+        .filter(
+            (departmentGrade) =>
+                departmentGradeCounts[departmentGrade] > maxSessionNumber
+        )
+        .map(
+            (departmentGrade) =>
+                `${departmentGrade}年級(${departmentGradeCounts[departmentGrade]}科)`
+        );
+
+    return excessiveItems.length > 0 ? excessiveItems.join(", ") : "無";
 }
