@@ -11,7 +11,7 @@ function sort_by_subject() {
     ]);
 }
 
-function sort_by_classname() {
+function sortByClassName() {
     const filtered = filteredSheet.getDataRange();
 
     filtered.offset(1, 0, filtered.getNumRows() - 1).sort([

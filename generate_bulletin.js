@@ -1,5 +1,5 @@
 function generate_bulletin() {
-    sort_by_classname();
+    sortByClassName();
 
     const [headers, ...data] = filteredSheet.getDataRange().getValues();
 

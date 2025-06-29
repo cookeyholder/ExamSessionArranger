@@ -30,7 +30,7 @@ function onOpen() {
         .addItem("步驟 3. 產生合併列印大袋封面", "merge_to_big_bag")
         .addSeparator()
         .addItem("依「科目」排序補考名單", "sort_by_subject")
-        .addItem("依「班級座號」排序補考名單", "sort_by_classname")
+        .addItem("依「班級座號」排序補考名單", "sortByClassName")
         .addItem("依「節次試場」排序補考名單", "sortBySessionThenClassroom")
         .addSeparator()
         .addItem("1-1. 清空", "initialize")
