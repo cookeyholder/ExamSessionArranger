@@ -88,13 +88,13 @@ const hasSessionQuota = (session, additionalStudents, maxStudents) => {
 /**
  * 檢查科別年級科目組合是否可安排到指定節次
  * @param {Object} session - 節次物件
- * @param {Array} dgItem - 科別年級科目資料 [key, count]
+ * @param {Array} dgsItem - 科別年級科目資料 [key, count]
  * @param {number} maxStudents - 最大學生數
  * @returns {boolean} 是否可安排
  */
-const canScheduleToSession = (session, dgItem, maxStudents) => {
-    const departmentGrade = dgItem[0].slice(0, dgItem[0].indexOf("_"));
-    const studentCount = dgItem[1];
+const canScheduleToSession = (session, dgsItem, maxStudents) => {
+    const departmentGrade = dgsItem[0].slice(0, dgsItem[0].indexOf("_"));
+    const studentCount = dgsItem[1];
 
     return (
         !hasDepartmentGradeDuplicate(session, departmentGrade) &&
@@ -107,7 +107,7 @@ const canScheduleToSession = (session, dgItem, maxStudents) => {
  * 將學生安排到指定節次
  * @param {Array} filteredData - 過濾後的學生資料
  * @param {Object} session - 節次物件
- * @param {Array} dgItem - 科別年級科目資料
+ * @param {Array} dgsItem - 科別年級科目資料
  * @param {number} sessionIndex - 節次索引
  * @param {number} sessionColumn - 節次欄位索引
  * @returns {Array} 更新後的學生資料
@@ -115,11 +115,11 @@ const canScheduleToSession = (session, dgItem, maxStudents) => {
 const assignStudentsToSession = (
     filteredData,
     session,
-    dgItem,
+    dgsItem,
     sessionIndex,
     sessionColumn
 ) => {
-    const targetKey = dgItem[0];
+    const targetKey = dgsItem[0];
 
     return filteredData.map((row) => {
         const departmentColumn = 0;
@@ -164,7 +164,7 @@ const processSessionScheduling = (
     const session = sessions[sessionIndex];
     let updatedData = filteredData;
 
-    for (const dgItem of dgs) {
+    for (const dgsItem of dgs) {
         if (session.population >= maxStudents) {
             Logger.log(
                 `(processSessionScheduling) 第${sessionIndex}節已達人數上限。`
@@ -178,11 +178,11 @@ const processSessionScheduling = (
             break;
         }
 
-        if (canScheduleToSession(session, dgItem, maxStudents)) {
+        if (canScheduleToSession(session, dgsItem, maxStudents)) {
             updatedData = assignStudentsToSession(
-                updatedData,
+                filteredData,
                 session,
-                dgItem,
+                dgsItem,
                 sessionIndex,
                 sessionColumn
             );
