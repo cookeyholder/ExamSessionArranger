@@ -232,7 +232,7 @@ function arrangeProfessionsSession() {
     const NUMBER_OF_CLASSROOMS = parseInt(configs["試場數量"]);
     const MAX_STUDENTS_PER_CLASSROOM = parseInt(configs["每間試場人數上限"]);
     const MAX_STUDENTS_PER_SESSION =
-        NUMBER_OF_CLASSROOMS * MAX_STUDENTS_PER_CLASSROOM;
+        0.9 * NUMBER_OF_CLASSROOMS * MAX_STUDENTS_PER_CLASSROOM;
 
     const dgs = getDepartmentGradeSubjectPopulation();
     const sessions = getSessionStatistics();
