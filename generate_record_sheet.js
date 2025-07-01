@@ -20,7 +20,7 @@ function generate_sessionRecordSheet() {
 
     let modified_data = [
         [
-            "A表：112學年度第1學期補考簽到及違規記錄表    　 　　　                                 監考教師簽名：　　　　　　　　　",
+            `A表：${configs["學年度"]}學年度第${configs["學期"]}學期補考簽到及違規記錄表    　 　　　                                 監考教師簽名：　　　　　　　　　`,
             "",
             "",
             "",
